@@ -294,4 +294,495 @@ footer p{color:#aaa;line-height:1.7}
   </div>
 </footer>
 
-<a class="whatsapp-float" id="floatWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650" aria-label="WhatsApp">
+<a class="whatsapp-float" id="floatWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp fa-xl"></i></a>
+
+<!-- ADMIN -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-shell">
+    <div class="admin-top">
+      <h2>Administration — Esthétique Plus</h2>
+      <button class="btn btn-small btn-light" id="adminClose">Fermer</button>
+    </div>
+    <div class="admin-body">
+
+      <div id="loginView" class="admin-login">
+        <h2 class="serif" style="font-size:2rem;margin-top:0">Connexion administrateur</h2>
+        <p style="color:#666">Connectez-vous avec le compte créé dans Supabase Auth.</p>
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username"></div>
+        <div class="field"><label>Mot de passe</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
+        <button class="btn" id="loginBtn">Se connecter</button>
+        <div id="loginStatus" class="status"></div>
+      </div>
+
+      <div id="adminView" class="hidden">
+        <div class="admin-tabs">
+          <button class="tab-btn active" data-tab="contentTab">Contenu</button>
+          <button class="tab-btn" data-tab="galleryTab">Galerie / images</button>
+          <button class="tab-btn" data-tab="servicesTab">Services</button>
+          <button class="tab-btn" data-tab="stepsTab">Étapes</button>
+          <button class="tab-btn" data-tab="contactTab">Contact</button>
+          <button class="tab-btn" data-tab="accountTab">Compte</button>
+          <button class="btn btn-small btn-danger" id="logoutBtn" style="margin-left:auto">Déconnexion</button>
+        </div>
+
+        <div class="admin-section active" id="contentTab">
+          <div class="notice">Tous les textes publics principaux sont enregistrés dans <b>site_content</b>. Modifiez-les ici sans toucher au code.</div>
+          <div class="admin-grid" id="contentFormGrid" style="margin-top:15px"></div>
+          <div class="admin-card" style="margin-top:15px">
+            <h3>Images principales</h3>
+            <div class="admin-grid">
+              <div class="field"><label>URL Hero</label><input id="heroUrlInput"></div>
+              <div class="field"><label>URL À propos</label><input id="aboutUrlInput"></div>
+            </div>
+            <div class="actions"><button class="btn btn-small" id="saveMainImages">Enregistrer les images</button></div>
+            <div id="contentStatus" class="status"></div>
+          </div>
+        </div>
+
+        <div class="admin-section" id="galleryTab">
+          <div class="file-import">
+            <h3 style="margin-top:0">Importer les 80 images de la racine</h3>
+            <p style="color:#666">Le système cherche automatiquement <b>1.jpg</b> jusqu'à <b>80.jpg</b> à la racine du même site. Chaque image est envoyée dans le bucket Supabase <b>site-images</b> puis ajoutée à la galerie.</p>
+            <button class="btn btn-accent" id="importRootBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Importer 1.jpg → 80.jpg</button>
+            <div class="progress"><i id="importProgress"></i></div>
+            <div id="importStatus" class="status"></div>
+          </div>
+          <div class="admin-grid" id="galleryAdminGrid" style="margin-top:15px"></div>
+        </div>
+
+        <div class="admin-section" id="servicesTab">
+          <div class="admin-card">
+            <h3>Ajouter un service</h3>
+            <div class="admin-grid">
+              <div class="field"><label>Titre</label><input id="newServiceTitle"></div>
+              <div class="field"><label>Icône</label><input id="newServiceIcon" value="✦"></div>
+              <div class="field" style="grid-column:1/-1"><label>Description</label><textarea id="newServiceDesc"></textarea></div>
+            </div>
+            <button class="btn btn-small" id="addServiceBtn">Ajouter</button>
+          </div>
+          <div class="table-grid" id="servicesAdminGrid" style="margin-top:15px"></div>
+        </div>
+
+        <div class="admin-section" id="stepsTab">
+          <div class="admin-card">
+            <h3>Ajouter une étape</h3>
+            <div class="admin-grid">
+              <div class="field"><label>Titre</label><input id="newStepTitle"></div>
+              <div class="field"><label>Ordre</label><input id="newStepOrder" type="number" value="10"></div>
+              <div class="field" style="grid-column:1/-1"><label>Description</label><textarea id="newStepDesc"></textarea></div>
+            </div>
+            <button class="btn btn-small" id="addStepBtn">Ajouter</button>
+          </div>
+          <div class="table-grid" id="stepsAdminGrid" style="margin-top:15px"></div>
+        </div>
+
+        <div class="admin-section" id="contactTab">
+          <div class="admin-grid" id="contactFormGrid"></div>
+          <div class="actions" style="margin-top:15px"><button class="btn" id="saveContactBtn">Enregistrer le contact</button></div>
+          <div id="contactStatus" class="status"></div>
+        </div>
+
+        <div class="admin-section" id="accountTab">
+          <div class="admin-card">
+            <h3>Compte Supabase Auth</h3>
+            <p style="color:#666">Le compte doit exister dans Supabase Authentication et son UUID doit être présent dans <b>admin_users</b>.</p>
+            <div class="field"><label>Nouvel email</label><input id="accountEmail" type="email"></div>
+            <button class="btn btn-small" id="saveEmailBtn">Changer l'email</button>
+          </div>
+          <div class="admin-card" style="margin-top:15px">
+            <h3>Nouveau mot de passe</h3>
+            <div class="field"><label>Mot de passe</label><input id="accountPassword" type="password"></div>
+            <button class="btn btn-small" id="savePasswordBtn">Changer le mot de passe</button>
+          </div>
+          <div id="accountStatus" class="status"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURATION SUPABASE
+   Remplace uniquement ces 2 valeurs.
+   ========================================================= */
+const SUPABASE_URL = "COLLE_ICI_URL_SUPABASE";
+const SUPABASE_ANON_KEY = "COLLE_ICI_CLE_ANON_SUPABASE";
+
+const hasSupabase = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("COLLE_ICI");
+const sb = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+const defaults = {
+  site_content: {
+    brand_name:"Esthétique Plus", location:"Parakou · Bénin",
+    nav_home:"Accueil", nav_services:"Services", nav_gallery:"Réalisations", nav_about:"À propos", nav_steps:"Méthode", nav_contact:"Contact", header_call:"Appeler",
+    hero_eyebrow:"Esthétique Plus", hero_title:"Espaces d'exception", hero_text:"Donnez une seconde vie à vos bâtiments, maisons et bureaux.",
+    hero_button_1:"Découvrir nos réalisations", hero_button_2:"Nous contacter", hero_image_url:"hero.jpg",
+    services_eyebrow:"Notre savoir-faire", services_title:"Nos services", services_intro:"Des solutions adaptées à chaque espace et à chaque projet.",
+    gallery_eyebrow:"Portfolio", gallery_title:"Nos réalisations", gallery_intro:"Découvrez nos modèles et nos réalisations.",
+    about_eyebrow:"Notre identité", about_title:"Un atelier à votre écoute",
+    about_text:"Nous concevons et transformons les espaces avec une attention particulière portée aux détails, aux finitions et aux besoins de chaque client.",
+    about_image_url:"about.jpg",
+    steps_eyebrow:"Notre méthode", steps_title:"Comment ça marche", steps_intro:"Un accompagnement simple, clair et personnalisé.",
+    contact_eyebrow:"Parlons de votre projet", contact_title:"Contactez-nous", contact_text:"Échangez directement avec notre équipe pour présenter votre projet.",
+    footer_text:"Atelier d'aménagement d'espaces.", footer_contact_title:"Contact", footer_copyright:"© 2026 Esthétique Plus. Tous droits réservés."
+  },
+  contact_settings:{
+    phone:"+229 01 94 87 06 50", whatsapp:"22994870650", email:"", address:"Parakou, Bénin", contact_hours:"Lundi — Samedi"
+  }
+};
+
+const ROOT_IMAGES = Array.from({length:80}, (_, i) => `./${i + 1}.jpg`);
+
+const state = { content:{...defaults.site_content}, contact:{...defaults.contact_settings}, models:[], services:[], steps:[], session:null };
+
+const textMap = {
+  brandName:"brand_name", locationText:"location", heroEyebrow:"hero_eyebrow", heroTitle:"hero_title", heroText:"hero_text",
+  heroBtn1:"hero_button_1", heroBtn2:"hero_button_2", servicesEyebrow:"services_eyebrow", servicesTitle:"services_title", servicesIntro:"services_intro",
+  galleryEyebrow:"gallery_eyebrow", galleryTitle:"gallery_title", galleryIntro:"gallery_intro", aboutEyebrow:"about_eyebrow", aboutTitle:"about_title",
+  aboutText:"about_text", stepsEyebrow:"steps_eyebrow", stepsTitle:"steps_title", stepsIntro:"steps_intro", contactEyebrow:"contact_eyebrow",
+  contactTitle:"contact_title", contactText:"contact_text", footerBrand:"brand_name", footerLocation:"location", footerText:"footer_text",
+  footerContactTitle:"footer_contact_title", footerCopyright:"footer_copyright"
+};
+const textKeys = Object.keys(defaults.site_content);
+
+function escapeHtml(v=""){
+  return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function cleanPhone(v=""){ return String(v).replace(/[^\d+]/g,""); }
+function whatsappUrl(v=""){ const n=String(v).replace(/\D/g,""); return n ? `https://wa.me/${n}` : "#"; }
+function setStatus(id,msg,ok=false){ const el=document.getElementById(id); if(!el)return; el.textContent=msg; el.className="status "+(ok?"ok":"err"); }
+function rootImage(i){ return ROOT_IMAGES[i-1] || "hero.jpg"; }
+
+function localData(){
+  state.models = ROOT_IMAGES.map((src,i)=>({id:`local-${i+1}`,title:`Réalisation ${i+1}`,description:"",image_url:src,sort_order:i+1,published:true}));
+  state.services=[
+    {id:"s1",title:"Aménagement",description:"Conception et transformation de vos espaces avec une finition soignée.",icon:"✦"},
+    {id:"s2",title:"Rénovation",description:"Modernisation de maisons, bureaux et bâtiments selon vos besoins.",icon:"◆"},
+    {id:"s3",title:"Accompagnement",description:"Conseil et suivi du projet jusqu'à la réalisation finale.",icon:"●"}
+  ];
+  state.steps=[
+    {id:"e1",title:"Échange",description:"Présentation de votre besoin et première orientation.",sort_order:1},
+    {id:"e2",title:"Conception",description:"Définition du projet, des choix et des finitions.",sort_order:2},
+    {id:"e3",title:"Réalisation",description:"Mise en œuvre et suivi jusqu'à la livraison.",sort_order:3}
+  ];
+}
+
+function applyText(){
+  for(const [id,key] of Object.entries(textMap)){ const el=document.getElementById(id); if(el)el.textContent=state.content[key] ?? ""; }
+  document.querySelectorAll("[data-text]").forEach(el=>{const k=el.dataset.text;if(state.content[k]!=null)el.textContent=state.content[k]});
+  const heroUrl=state.content.hero_image_url || "./hero.jpg";
+  const aboutUrl=state.content.about_image_url || "./about.jpg";
+  document.getElementById("heroImage").src=heroUrl;
+  document.getElementById("aboutImage").src=aboutUrl;
+  const phone=state.contact.phone || "";
+  const wa=state.contact.whatsapp || "";
+  const email=state.contact.email || "";
+  const address=state.contact.address || "";
+  const hours=state.contact.contact_hours || "";
+  document.getElementById("headerCall").href=phone ? `tel:${cleanPhone(phone)}` : "#";
+  document.getElementById("contactPhone").textContent=phone || "—";
+  document.getElementById("contactPhone").href=phone ? `tel:${cleanPhone(phone)}` : "#";
+  document.getElementById("contactWhatsapp").textContent=wa ? `+${String(wa).replace(/^\+?/,"")}` : "—";
+  document.getElementById("contactWhatsapp").href=whatsappUrl(wa);
+  document.getElementById("contactWhatsappBtn").href=whatsappUrl(wa);
+  document.getElementById("floatWhatsapp").href=whatsappUrl(wa);
+  document.getElementById("contactEmail").textContent=email || "—";
+  document.getElementById("contactEmail").href=email ? `mailto:${email}` : "#";
+  document.getElementById("contactAddress").textContent=address || "—";
+  document.getElementById("contactHours").textContent=hours || "—";
+  document.getElementById("footerPhone").textContent=phone || "—";
+  document.getElementById("footerAddress").textContent=address || "—";
+  document.getElementById("footerWhatsapp").textContent=wa ? `+${String(wa).replace(/^\+?/,"")}` : "—";
+  document.getElementById("footerWhatsapp").href=whatsappUrl(wa);
+}
+
+function renderServices(){
+  const grid=document.getElementById("servicesGrid");
+  grid.innerHTML=state.services.map(x=>`
+    <article class="card service-card">
+      <div class="icon-box">${escapeHtml(x.icon||"✦")}</div>
+      <h3>${escapeHtml(x.title)}</h3>
+      <p>${escapeHtml(x.description)}</p>
+    </article>`).join("");
+}
+function renderGallery(){
+  const grid=document.getElementById("galleryGrid");
+  grid.innerHTML=state.models.filter(x=>x.published!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map(x=>`
+    <article class="gallery-card">
+      <div class="gallery-image"><img loading="lazy" src="${escapeHtml(x.image_url)}" alt="${escapeHtml(x.title)}" onerror="this.onerror=null; this.src='./hero.jpg'"></div>
+      <div class="gallery-caption"><h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.description||"")}</p></div>
+    </article>`).join("");
+}
+function renderSteps(){
+  const grid=document.getElementById("stepsGrid");
+  grid.innerHTML=state.steps.filter(x=>x.published!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map((x,i)=>`
+    <article class="card step-card">
+      <div class="step-number">0${i+1}</div>
+      <h3>${escapeHtml(x.title)}</h3>
+      <p>${escapeHtml(x.description)}</p>
+    </article>`).join("");
+}
+function renderAll(){ applyText(); renderServices(); renderGallery(); renderSteps(); }
+
+async function loadPublic(){
+  localData();
+  if(!sb){ renderAll(); return; }
+  try{
+    const [c,m,s,e,contact]=await Promise.all([
+      sb.from("site_content").select("key,value").eq("published",true),
+      sb.from("models").select("*").eq("published",true).order("sort_order",{ascending:true}),
+      sb.from("services").select("*").eq("published",true).order("sort_order",{ascending:true}),
+      sb.from("experience_steps").select("*").eq("published",true).order("sort_order",{ascending:true}),
+      sb.from("contact_settings").select("key,value").eq("published",true)
+    ]);
+    if(c.data?.length) c.data.forEach(x=>state.content[x.key]=x.value);
+    if(contact.data?.length) contact.data.forEach(x=>state.contact[x.key]=x.value);
+    if(m.data?.length) state.models=m.data;
+    if(s.data?.length) state.services=s.data;
+    if(e.data?.length) state.steps=e.data;
+    renderAll();
+  }catch(err){ console.error(err); renderAll(); }
+}
+
+/* 3 clics en moins de 2 secondes sur le logo */
+let clicks=0,clickTimer=null;
+document.getElementById("adminTrigger").addEventListener("click",e=>{
+  e.preventDefault();
+  clicks++;
+  if(clicks===1) clickTimer=setTimeout(()=>{clicks=0},2000);
+  if(clicks>=3){clearTimeout(clickTimer);clicks=0;openAdmin();}
+});
+
+document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("mainNav").classList.toggle("open"));
+document.getElementById("adminClose").addEventListener("click",()=>document.getElementById("adminOverlay").classList.remove("open"));
+
+function openAdmin(){
+  document.getElementById("adminOverlay").classList.add("open");
+  if(sb) checkSession(); else setStatus("loginStatus","Configure d'abord SUPABASE_URL et SUPABASE_ANON_KEY dans le fichier.",false);
+}
+async function checkSession(){
+  const {data}=await sb.auth.getSession();
+  state.session=data.session;
+  if(state.session) showAdmin(); else showLogin();
+}
+function showLogin(){
+  document.getElementById("loginView").classList.remove("hidden");
+  document.getElementById("adminView").classList.add("hidden");
+}
+function showAdmin(){
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("adminView").classList.remove("hidden");
+  buildContentForm(); buildContactForm(); loadAdminData();
+}
+async function verifyAdmin(){
+  if(!state.session)return false;
+  const {data,error}=await sb.from("admin_users").select("user_id").eq("user_id",state.session.user.id).maybeSingle();
+  if(error || !data){
+    await sb.auth.signOut();
+    showLogin();
+    setStatus("loginStatus","Ce compte n'est pas autorisé comme administrateur.",false);
+    return false;
+  }
+  return true;
+}
+document.getElementById("loginBtn").addEventListener("click",async()=>{
+  if(!sb)return;
+  setStatus("loginStatus","Connexion...",true);
+  const email=document.getElementById("loginEmail").value.trim(), password=document.getElementById("loginPassword").value;
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){setStatus("loginStatus",error.message,false);return;}
+  state.session=data.session;
+  if(await verifyAdmin()){setStatus("loginStatus","Connecté.",true);showAdmin();}
+});
+document.getElementById("logoutBtn").addEventListener("click",async()=>{await sb.auth.signOut();state.session=null;showLogin();});
+
+const contentLabels={
+  brand_name:"Nom de l'entreprise",location:"Localisation",nav_home:"Navigation Accueil",nav_services:"Navigation Services",nav_gallery:"Navigation Réalisations",
+  nav_about:"Navigation À propos",nav_steps:"Navigation Méthode",nav_contact:"Navigation Contact",header_call:"Bouton Appeler",
+  hero_eyebrow:"Hero — petit titre",hero_title:"Hero — titre",hero_text:"Hero — texte",hero_button_1:"Hero — bouton 1",hero_button_2:"Hero — bouton 2",
+  services_eyebrow:"Services — petit titre",services_title:"Services — titre",services_intro:"Services — introduction",
+  gallery_eyebrow:"Galerie — petit titre",gallery_title:"Galerie — titre",gallery_intro:"Galerie — introduction",
+  about_eyebrow:"À propos — petit titre",about_title:"À propos — titre",about_text:"À propos — texte",
+  steps_eyebrow:"Étapes — petit titre",steps_title:"Étapes — titre",steps_intro:"Étapes — introduction",
+  contact_eyebrow:"Contact — petit titre",contact_title:"Contact — titre",contact_text:"Contact — texte",
+  footer_text:"Pied de page — texte",footer_contact_title:"Pied de page — contact",footer_copyright:"Pied de page — copyright"
+};
+
+function buildContentForm(){
+  const grid=document.getElementById("contentFormGrid");
+  grid.innerHTML=textKeys.map(k=>`<div class="field"><label>${escapeHtml(contentLabels[k]||k)}</label><textarea data-content-key="${escapeHtml(k)}">${escapeHtml(state.content[k]||"")}</textarea></div>`).join("");
+}
+async function saveContentKey(k,v){
+  const {error}=await sb.from("site_content").upsert({key:k,value:v,published:true,updated_at:new Date().toISOString()});
+  if(error)throw error; state.content[k]=v;
+}
+document.getElementById("saveMainImages").addEventListener("click",async()=>{
+  try{
+    await saveContentKey("hero_image_url",document.getElementById("heroUrlInput").value.trim());
+    await saveContentKey("about_image_url",document.getElementById("aboutUrlInput").value.trim());
+    renderAll();setStatus("contentStatus","Images enregistrées.",true);
+  }catch(e){setStatus("contentStatus",e.message,false)}
+});
+
+async function loadAdminData(){
+  if(!await verifyAdmin())return;
+  const [c,m,s,e,contact]=await Promise.all([
+    sb.from("site_content").select("key,value").order("key"),
+    sb.from("models").select("*").order("sort_order",{ascending:true}),
+    sb.from("services").select("*").order("sort_order",{ascending:true}),
+    sb.from("experience_steps").select("*").order("sort_order",{ascending:true}),
+    sb.from("contact_settings").select("key,value").order("key")
+  ]);
+  if(c.data)c.data.forEach(x=>state.content[x.key]=x.value);
+  if(contact.data)contact.data.forEach(x=>state.contact[x.key]=x.value);
+  state.models=m.data||[]; state.services=s.data||[]; state.steps=e.data||[];
+  document.getElementById("heroUrlInput").value=state.content.hero_image_url||"";
+  document.getElementById("aboutUrlInput").value=state.content.about_image_url||"";
+  document.getElementById("accountEmail").value=state.session?.user?.email||"";
+  buildContentForm();buildContactForm();renderAdminLists();renderAll();
+}
+
+document.getElementById("contentFormGrid").addEventListener("input",e=>{
+  const k=e.target.dataset.contentKey;if(k)state.content[k]=e.target.value;
+});
+document.getElementById("contentFormGrid").addEventListener("change",async e=>{
+  const k=e.target.dataset.contentKey;if(!k)return;
+  try{await saveContentKey(k,e.target.value);renderAll();setStatus("contentStatus","Texte enregistré.",true)}catch(err){setStatus("contentStatus",err.message,false)}
+});
+
+const contactLabels={phone:"Téléphone",whatsapp:"WhatsApp (numéro international)",email:"Email",address:"Adresse",contact_hours:"Horaires"};
+function buildContactForm(){
+  const grid=document.getElementById("contactFormGrid");
+  grid.innerHTML=Object.keys(defaults.contact_settings).map(k=>`<div class="field"><label>${contactLabels[k]||k}</label><input data-contact-key="${k}" value="${escapeHtml(state.contact[k]||"")}"></div>`).join("");
+}
+document.getElementById("saveContactBtn").addEventListener("click",async()=>{
+  try{
+    for(const el of document.querySelectorAll("[data-contact-key]")){
+      const k=el.dataset.contactKey,v=el.value.trim();
+      const {error}=await sb.from("contact_settings").upsert({key:k,value:v,published:true,updated_at:new Date().toISOString()});
+      if(error)throw error; state.contact[k]=v;
+    }
+    renderAll();setStatus("contactStatus","Coordonnées enregistrées.",true);
+  }catch(e){setStatus("contactStatus",e.message,false)}
+});
+
+function renderAdminLists(){
+  const g=document.getElementById("galleryAdminGrid");
+  g.innerHTML=state.models.map(x=>`
+    <div class="admin-card">
+      <div class="gallery-image" style="margin:-18px -18px 15px;width:calc(100% + 36px)"><img src="${escapeHtml(x.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null; this.src='./hero.jpg'"></div>
+      <div class="field"><label>Titre</label><input data-model-title="${x.id}" value="${escapeHtml(x.title)}"></div>
+      <div class="field"><label>Description</label><textarea data-model-desc="${x.id}">${escapeHtml(x.description||"")}</textarea></div>
+      <div class="field"><label>URL image</label><input data-model-url="${x.id}" value="${escapeHtml(x.image_url)}"></div>
+      <div class="field"><label>Ordre</label><input type="number" data-model-order="${x.id}" value="${x.sort_order||0}"></div>
+      <label style="font-size:.82rem"><input type="checkbox" data-model-pub="${x.id}" ${x.published!==false?"checked":""}> Publié</label>
+      <div class="actions"><button class="btn btn-small" onclick="saveModel('${x.id}')">Enregistrer</button><button class="btn btn-small btn-danger" onclick="deleteModel('${x.id}')">Supprimer</button></div>
+    </div>`).join("");
+  const sg=document.getElementById("servicesAdminGrid");
+  sg.innerHTML=state.services.map(x=>`
+    <div class="admin-card">
+      <div class="admin-grid">
+        <div class="field"><label>Titre</label><input data-service-title="${x.id}" value="${escapeHtml(x.title)}"></div>
+        <div class="field"><label>Icône</label><input data-service-icon="${x.id}" value="${escapeHtml(x.icon||"✦")}"></div>
+      </div>
+      <div class="field"><label>Description</label><textarea data-service-desc="${x.id}">${escapeHtml(x.description)}</textarea></div>
+      <div class="actions"><button class="btn btn-small" onclick="saveService('${x.id}')">Enregistrer</button><button class="btn btn-small btn-danger" onclick="deleteService('${x.id}')">Supprimer</button></div>
+    </div>`).join("");
+  const eg=document.getElementById("stepsAdminGrid");
+  eg.innerHTML=state.steps.map(x=>`
+    <div class="admin-card">
+      <div class="admin-grid">
+        <div class="field"><label>Titre</label><input data-step-title="${x.id}" value="${escapeHtml(x.title)}"></div>
+        <div class="field"><label>Ordre</label><input type="number" data-step-order="${x.id}" value="${x.sort_order||0}"></div>
+      </div>
+      <div class="field"><label>Description</label><textarea data-step-desc="${x.id}">${escapeHtml(x.description)}</textarea></div>
+      <div class="actions"><button class="btn btn-small" onclick="saveStep('${x.id}')">Enregistrer</button><button class="btn btn-small btn-danger" onclick="deleteStep('${x.id}')">Supprimer</button></div>
+    </div>`).join("");
+}
+
+window.saveModel=async function(id){
+  const payload={
+    title:document.querySelector(`[data-model-title="${id}"]`).value,
+    description:document.querySelector(`[data-model-desc="${id}"]`).value,
+    image_url:document.querySelector(`[data-model-url="${id}"]`).value,
+    sort_order:Number(document.querySelector(`[data-model-order="${id}"]`).value)||0,
+    published:document.querySelector(`[data-model-pub="${id}"]`).checked,
+    updated_at:new Date().toISOString()
+  };
+  const {error}=await sb.from("models").update(payload).eq("id",id); if(error)alert(error.message); else {await loadAdminData();}
+};
+window.deleteModel=async function(id){if(!confirm("Supprimer cette image ?"))return;const {error}=await sb.from("models").delete().eq("id",id);if(error)alert(error.message);else await loadAdminData();};
+window.saveService=async function(id){
+  const payload={title:document.querySelector(`[data-service-title="${id}"]`).value,icon:document.querySelector(`[data-service-icon="${id}"]`).value,description:document.querySelector(`[data-service-desc="${id}"]`).value,updated_at:new Date().toISOString()};
+  const {error}=await sb.from("services").update(payload).eq("id",id);if(error)alert(error.message);else await loadAdminData();
+};
+window.deleteService=async function(id){if(!confirm("Supprimer ce service ?"))return;const {error}=await sb.from("services").delete().eq("id",id);if(error)alert(error.message);else await loadAdminData();};
+window.saveStep=async function(id){
+  const payload={title:document.querySelector(`[data-step-title="${id}"]`).value,description:document.querySelector(`[data-step-desc="${id}"]`).value,sort_order:Number(document.querySelector(`[data-step-order="${id}"]`).value)||0,updated_at:new Date().toISOString()};
+  const {error}=await sb.from("experience_steps").update(payload).eq("id",id);if(error)alert(error.message);else await loadAdminData();
+};
+window.deleteStep=async function(id){if(!confirm("Supprimer cette étape ?"))return;const {error}=await sb.from("experience_steps").delete().eq("id",id);if(error)alert(error.message);else await loadAdminData();};
+
+document.getElementById("addServiceBtn").addEventListener("click",async()=>{
+  const payload={title:document.getElementById("newServiceTitle").value,description:document.getElementById("newServiceDesc").value,icon:document.getElementById("newServiceIcon").value||"✦",sort_order:state.services.length+1,published:true};
+  const {error}=await sb.from("services").insert(payload);if(error)alert(error.message);else{document.getElementById("newServiceTitle").value="";document.getElementById("newServiceDesc").value="";await loadAdminData();}
+});
+document.getElementById("addStepBtn").addEventListener("click",async()=>{
+  const payload={title:document.getElementById("newStepTitle").value,description:document.getElementById("newStepDesc").value,sort_order:Number(document.getElementById("newStepOrder").value)||10,published:true};
+  const {error}=await sb.from("experience_steps").insert(payload);if(error)alert(error.message);else{document.getElementById("newStepTitle").value="";document.getElementById("newStepDesc").value="";await loadAdminData();}
+});
+
+document.querySelectorAll(".tab-btn").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");document.getElementById(btn.dataset.tab).classList.add("active");
+}));
+
+async function importRootImages(){
+  if(!sb || !state.session || !(await verifyAdmin()))return;
+  const btn=document.getElementById("importRootBtn"); btn.disabled=true;
+  let done=0,errors=0;
+  for(let i=1;i<=80;i++){
+    const fileName=`${i}.jpg`, source=rootImage(i);
+    try{
+      const response=await fetch(source,{cache:"no-store"});
+      if(!response.ok)throw new Error("Image introuvable");
+      const blob=await response.blob();
+      const path=`gallery/${i}.jpg`;
+      const upload=await sb.storage.from("site-images").upload(path,blob,{contentType:blob.type||"image/jpeg",upsert:true});
+      if(upload.error)throw upload.error;
+      const {data:pub}=sb.storage.from("site-images").getPublicUrl(path);
+      const existing=await sb.from("models").select("id").eq("sort_order",i).maybeSingle();
+      const payload={title:`Réalisation ${i}`,description:"",image_url:pub.publicUrl,sort_order:i,published:true,updated_at:new Date().toISOString()};
+      let result;
+      if(existing.data) result=await sb.from("models").update(payload).eq("id",existing.data.id);
+      else result=await sb.from("models").insert(payload);
+      if(result.error)throw result.error;
+      done++;
+    }catch(e){console.warn(fileName,e);errors++}
+    const pct=Math.round((i/80)*100);document.getElementById("importProgress").style.width=pct+"%";setStatus("importStatus",`${i}/80 traitées — ${done} importées, ${errors} erreur(s).`,errors===0);
+  }
+  btn.disabled=false; await loadAdminData();
+}
+document.getElementById("importRootBtn").addEventListener("click",importRootImages);
+
+document.getElementById("saveEmailBtn").addEventListener("click",async()=>{
+  const email=document.getElementById("accountEmail").value.trim();
+  const {error}=await sb.auth.updateUser({email});
+  setStatus("accountStatus",error?error.message:"Demande de changement d'email envoyée. Selon la configuration Supabase, une confirmation peut être demandée.",!error);
+});
+document.getElementById("savePasswordBtn").addEventListener("click",async()=>{
+  const password=document.getElementById("accountPassword").value;
+  if(password.length<6){setStatus("accountStatus","Le mot de passe doit comporter au moins 6 caractères.",false);return}
+  const {error}=await sb.auth.updateUser({password});
+  setStatus("accountStatus",error?error.message:"Mot de passe modifié.",!error);
+});
+
+if(sb){
+  sb.auth.onAuthStateChange((_event,session)=>{state.session=session;});
+}
+loadPublic();
+</script>
+</body>
+</html>
