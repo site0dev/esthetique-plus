@@ -39,34 +39,33 @@ a{text-decoration:none;color:inherit}
 .section-title{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:9px 0 12px}
 .section-intro{color:#666;line-height:1.75;margin:0}
 .site-header{position:sticky;top:0;z-index:50;background:rgba(250,249,246,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.header-inner{min-height:72px;display:flex;align-items:center;gap:22px}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}
-.brand-mark{width:38px;height:38px;border:1px solid var(--ink);display:grid;place-items:center;font-family:"Playfair Display";font-size:18px}
+.header-inner{min-height:72px;display:flex;align-items:center;gap:22px;position:relative}
+.brand{display:flex;align-items:center;min-width:0;flex:0 1 auto}
 .brand-copy{display:grid;line-height:1.1}
 .brand-name{font-weight:700;white-space:nowrap}
 .location{font-size:.72rem;color:#777;margin-top:3px}
 .nav{display:flex;align-items:center;justify-content:center;gap:20px;flex:1}
 .nav a{font-size:.86rem;color:#555}
 .nav a:hover{color:var(--ink)}
-.header-actions{display:flex;align-items:center;gap:8px}
+.header-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
 .btn{border:1px solid var(--ink);background:var(--ink);color:white;padding:12px 17px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600}
 .btn:hover{opacity:.9}
 .btn-light{background:transparent;color:var(--ink)}
 .btn-accent{background:var(--accent);border-color:var(--accent)}
 .btn-danger{background:var(--danger);border-color:var(--danger)}
 .btn-small{padding:8px 11px;font-size:.82rem}
-.menu-btn{display:none;border:1px solid var(--line);background:white;padding:9px;border-radius:4px}
-.hero{min-height:78vh;display:grid;align-items:end;position:relative;overflow:hidden;background:#222}
+.menu-btn{display:none;border:1px solid var(--line);background:white;color:var(--ink);width:42px;height:42px;padding:0;border-radius:6px;align-items:center;justify-content:center;cursor:pointer;margin-left:auto}
+.hero{min-height:calc(100vh - 72px);display:grid;align-items:center;position:relative;overflow:hidden;background:#222;isolation:isolate}
 .hero-media{position:absolute;inset:0}
-.hero-media img{width:100%;height:100%;object-fit:cover}
-.hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.2) 65%,rgba(0,0,0,.35))}
-.hero-content{position:relative;color:white;padding:120px 0 90px;max-width:760px}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center center}
+.hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,.35) 72%,rgba(0,0,0,.42) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;color:white;padding:90px 0;max-width:780px;width:100%;text-shadow:0 2px 18px rgba(0,0,0,.25)}
 .hero .eyebrow{color:#e9c987}
-.hero h1{font-size:clamp(3rem,8vw,6.4rem);line-height:.96;margin:14px 0 22px}
-.hero p{font-size:clamp(1rem,2vw,1.18rem);line-height:1.75;max-width:680px;color:#eee}
+.hero h1{font-size:clamp(2.7rem,7vw,6.2rem);line-height:1.02;margin:14px 0 22px;max-width:780px}
+.hero p{font-size:clamp(1rem,2vw,1.18rem);line-height:1.7;max-width:650px;color:#f5f5f5}
 .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
 .hero .btn-light{border-color:white;color:white}
-.grid-auto{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;align-items:stretch}
 .card{background:white;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .service-card{padding:25px;min-height:210px}
 .icon-box{width:42px;height:42px;border:1px solid var(--line);display:grid;place-items:center;margin-bottom:18px;color:var(--accent)}
@@ -78,14 +77,14 @@ a{text-decoration:none;color:inherit}
 .gallery-card:hover img{transform:scale(1.04)}
 .gallery-caption{padding:16px}
 .gallery-caption h3{margin:0 0 6px;font-size:1.1rem}
-.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center}
+.about-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:center}
 .about-image{aspect-ratio:4/3;overflow:hidden;background:#e9e6df;border-radius:8px}
 .about-image img{width:100%;height:100%;object-fit:cover}
 .about-copy p{color:#666;line-height:1.8}
 .steps .step-card{padding:24px;position:relative}
 .step-number{font-size:.75rem;font-weight:700;color:var(--accent);letter-spacing:.12em;margin-bottom:22px}
 .step-card h3{font-size:1.25rem;margin:0 0 8px}
-.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.contact-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;align-items:stretch}
 .contact-card{background:var(--ink);color:white;border-radius:8px;padding:35px}
 .contact-card .eyebrow{color:#e9c987}
 .contact-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.16)}
@@ -94,7 +93,7 @@ a{text-decoration:none;color:inherit}
 .contact-item a{word-break:break-word}
 .contact-side{border:1px solid var(--line);padding:35px;border-radius:8px;background:white}
 footer{background:#111;color:#ddd;padding:48px 0}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(2,minmax(0,1fr));gap:30px}
 footer .brand-name{color:white}
 footer p{color:#aaa;line-height:1.7}
 .footer-bottom{margin-top:32px;padding-top:20px;border-top:1px solid #2b2b2b;color:#888;font-size:.82rem}
@@ -130,35 +129,50 @@ footer p{color:#aaa;line-height:1.7}
 .file-import{border:2px dashed #ccc;padding:20px;border-radius:8px;background:white}
 .progress{height:8px;background:#ddd;border-radius:99px;overflow:hidden;margin-top:12px}
 .progress i{display:block;height:100%;width:0;background:var(--accent)}
-@media(max-width:1000px){
-  .grid-auto{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .nav{gap:12px}
-  .nav a{font-size:.78rem}
+@media(max-width:1100px){
+  .nav{gap:14px}
+  .nav a{font-size:.8rem}
+  .grid-auto{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
   .table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:760px){
-  .section{padding:65px 0}
-  .header-inner{flex-wrap:wrap;padding:10px 0}
-  .menu-btn{display:block;margin-left:auto}
-  .nav{display:none;order:4;width:100%;flex-direction:column;align-items:stretch;border-top:1px solid var(--line);padding-top:10px}
-  .nav.open{display:flex}
-  .nav a{padding:8px 0}
+@media(max-width:820px){
+  .section{padding:68px 0}
+  .header-inner{min-height:64px;padding:8px 0}
   .header-actions .btn{display:none}
-  .grid-auto{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .about-wrap,.contact-wrap{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .admin-grid,.table-grid{grid-template-columns:1fr}
+  .menu-btn{display:flex}
+  .nav{display:none;position:absolute;top:calc(100% + 1px);left:0;right:0;width:100%;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:0;background:rgba(250,249,246,.98);border:1px solid var(--line);border-top:0;padding:10px 4%;box-shadow:0 12px 25px rgba(0,0,0,.08)}
+  .nav.open{display:flex}
+  .nav a{padding:9px 12px;flex:0 1 auto}
+  .grid-auto{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+  .about-wrap,.contact-wrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-grid,.table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .admin-overlay{padding:8px}
   .admin-shell{min-height:calc(100vh - 16px)}
+  .hero{min-height:calc(100svh - 64px)}
+  .hero-content{padding:78px 0 72px}
 }
-@media(max-width:430px){
-  .container{width:min(94%,1180px)}
-  .grid-auto{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr}
-  .hero-content{padding:95px 0 65px}
-  .hero h1{font-size:3.15rem}
-  .hero-actions .btn{width:100%}
+@media(max-width:560px){
+  .container{width:94%}
+  .grid-auto{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .service-card{padding:18px;min-height:180px}
+  .gallery-caption{padding:12px}
+  .about-wrap,.contact-wrap{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .admin-grid,.table-grid{grid-template-columns:1fr}
+  .hero{min-height:calc(100svh - 64px)}
+  .hero-content{padding:68px 0 58px}
+  .hero h1{font-size:clamp(2.5rem,12vw,4rem);line-height:1.02}
+  .hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-actions .btn{width:100%;padding:11px 10px}
+  .nav a{font-size:.82rem;padding:8px 10px}
   .admin-body{padding:12px}
+}
+@media(max-width:360px){
+  .grid-auto{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-actions{grid-template-columns:1fr}
+  .hero h1{font-size:2.35rem}
+  .footer-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -168,7 +182,6 @@ footer p{color:#aaa;line-height:1.7}
 <header class="site-header">
   <div class="container header-inner">
     <a href="#accueil" class="brand" id="adminTrigger" title="Administration">
-      <span class="brand-mark">EP</span>
       <span class="brand-copy">
         <span class="brand-name" id="brandName">Esthétique Plus</span>
         <span class="location" id="locationText">Parakou · Bénin</span>
@@ -278,7 +291,7 @@ footer p{color:#aaa;line-height:1.7}
   <div class="container">
     <div class="footer-grid">
       <div>
-        <div class="brand"><span class="brand-mark" style="border-color:#777">EP</span><span class="brand-copy"><span class="brand-name" id="footerBrand">Esthétique Plus</span><span class="location" id="footerLocation">Parakou · Bénin</span></span></div>
+        <div class="brand"><span class="brand-copy"><span class="brand-name" id="footerBrand">Esthétique Plus</span><span class="location" id="footerLocation">Parakou · Bénin</span></span></div>
         <p id="footerText">Atelier d'aménagement d'espaces.</p>
       </div>
       <div>
@@ -555,6 +568,7 @@ document.getElementById("adminTrigger").addEventListener("click",e=>{
 });
 
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("mainNav").classList.toggle("open"));
+document.querySelectorAll("#mainNav a").forEach(a=>a.addEventListener("click",()=>document.getElementById("mainNav").classList.remove("open")));
 document.getElementById("adminClose").addEventListener("click",()=>document.getElementById("adminOverlay").classList.remove("open"));
 
 function openAdmin(){
