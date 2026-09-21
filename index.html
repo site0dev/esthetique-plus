@@ -130,8 +130,8 @@ footer p{color:#aaa;line-height:1.7}
 .field input,.field textarea,.field select{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:5px;background:white;outline:none}
 .field textarea{min-height:105px;resize:vertical}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
-.admin-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.tab-btn{border:1px solid #ccc;background:white;padding:9px 12px;border-radius:5px;cursor:pointer}
+.admin-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;position:relative;z-index:5;pointer-events:auto}
+.tab-btn{border:1px solid #ccc;background:white;padding:9px 12px;border-radius:5px;cursor:pointer;position:relative;z-index:6;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .tab-btn.active{background:#171717;color:white;border-color:#171717}
 .admin-section{display:none}
 .admin-section.active{display:block}
@@ -928,11 +928,32 @@ document.getElementById("addStepBtn").addEventListener("click",async()=>{
   const {error}=await sb.from("experience_steps").insert(payload);if(error)alert(error.message);else{document.getElementById("newStepTitle").value="";document.getElementById("newStepDesc").value="";await loadAdminData();}
 });
 
-document.querySelectorAll(".tab-btn").forEach(btn=>btn.addEventListener("click",()=>{
-  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+function switchAdminTab(button){
+  if(!button || !button.dataset.tab) return;
+  const targetId=button.dataset.tab;
+  const target=document.getElementById(targetId);
+  if(!target) return;
+  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.toggle("active",x===button));
   document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
-  btn.classList.add("active");document.getElementById(btn.dataset.tab).classList.add("active");
-}));
+  target.classList.add("active");
+  target.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* Navigation administration robuste sur mobile : délégation d'événement. */
+document.getElementById("adminView").addEventListener("click",e=>{
+  const button=e.target.closest(".tab-btn");
+  if(!button) return;
+  e.preventDefault();
+  e.stopPropagation();
+  switchAdminTab(button);
+});
+
+document.getElementById("adminView").addEventListener("touchend",e=>{
+  const button=e.target.closest(".tab-btn");
+  if(!button) return;
+  e.preventDefault();
+  switchAdminTab(button);
+},{passive:false});
 
 async function importRootImages(){
   const btn=document.getElementById("importRootBtn");
