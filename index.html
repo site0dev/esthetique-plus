@@ -428,12 +428,10 @@ body.admin-open{overflow:hidden!important}
         </div>
         <div class="admin-section" id="galleryTab">
           <div class="file-import">
-            <h3 style="margin-top:0">Importer les 80 images de la racine</h3>
-            <p style="color:#666">Le système cherche automatiquement <b>1.jpg</b> jusqu'à <b>80.jpg</b> à la racine du même site. Chaque image est envoyée dans le bucket Supabase <b>site-images</b> puis ajoutée à la galerie.</p>
-            <button class="btn btn-accent" id="importRootBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Importer 1.jpg → 80.jpg</button>
-            <div class="progress"><i id="importProgress"></i></div>
-            <div id="importStatus" class="status"></div>
-            <p class="admin-help">La synchronisation automatique se lance après la connexion administrateur et envoie les images de la racine vers Supabase Storage sans action supplémentaire.</p>
+            <h3 style="margin-top:0">Synchronisation des images</h3>
+            <button class="btn btn-accent" id="importRootBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Synchroniser les images</button>
+            <div class="progress" aria-label="Progression de la synchronisation"><i id="importProgress"></i></div>
+            <div id="importStatus" class="status" aria-live="polite"></div>
           </div>
           <div class="admin-grid" id="galleryAdminGrid" style="margin-top:15px"></div>
         </div>
@@ -1021,97 +1019,123 @@ async function syncRootImages({manual=false}={}){
   const btn=document.getElementById("importRootBtn");
   const status=document.getElementById("importStatus");
   const progress=document.getElementById("importProgress");
-  if(!sb){ setStatus("importStatus","Supabase n'est pas configuré.",false); return; }
+  if(!sb){ if(manual) setStatus("importStatus","Supabase non configuré.",false); return; }
 
   const {data:{user},error:userError}=await sb.auth.getUser();
-  if(userError || !user){
-    if(manual) setStatus("importStatus","Session administrateur absente. Reconnectez-vous.",false);
-    return;
-  }
+  if(userError || !user){ if(manual) setStatus("importStatus","Connexion administrateur requise.",false); return; }
 
   const {data:adminRow,error:adminError}=await sb.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
-  if(adminError || !adminRow){
-    console.error("Autorisation synchronisation images:",adminError);
-    if(manual) setStatus("importStatus","Ce compte n'est pas autorisé à envoyer des fichiers vers Supabase.",false);
-    return;
-  }
+  if(adminError || !adminRow){ if(manual) setStatus("importStatus","Compte administrateur non autorisé.",false); return; }
 
   if(btn) btn.disabled=true;
   if(progress) progress.style.width="0%";
-  let done=0, skipped=0, errors=0;
-  const details=[];
+  if(status) status.textContent="Synchronisation en cours…";
+
   const storage=sb.storage.from("site-images");
+  let uploaded=0, missing=0, failed=0, processed=0;
+  const total=82;
 
-  // Les images du site qui doivent être automatiquement synchronisées.
-  const files=["hero.jpg","about.jpg",...Array.from({length:80},(_,i)=>`${i+1}.jpg`)];
+  // On teste plusieurs extensions/casses pour retrouver les vrais fichiers placés à la racine.
+  const candidates=(name)=>[name+".jpg",name+".jpeg",name+".png",name+".webp",name+".JPG",name+".JPEG",name+".PNG",name+".WEBP"];
 
-  const uploadOne=async(fileName,index,total)=>{
-    const source=new URL(fileName,document.baseURI).href;
-    try{
-      const response=await fetch(source,{cache:"no-store",credentials:"same-origin"});
-      if(!response.ok) throw new Error(`HTTP ${response.status}`);
-      const blob=await response.blob();
-      if(!blob.size) throw new Error("fichier vide");
-
-      const path=`site/${fileName}`;
-      const upload=await storage.upload(path,blob,{
-        contentType:blob.type || "image/jpeg",
-        upsert:true,
-        cacheControl:"3600"
-      });
-      if(upload.error) throw new Error(`Storage : ${upload.error.message}`);
-
-      const {data:pub}=storage.getPublicUrl(path);
-      const publicUrl=pub?.publicUrl;
-      if(!publicUrl) throw new Error("URL publique Supabase introuvable");
-
-      // Les deux images principales alimentent directement le contenu du site.
-      if(fileName==="hero.jpg" || fileName==="about.jpg"){
-        const key=fileName==="hero.jpg" ? "hero_image_url" : "about_image_url";
-        const {error}=await sb.from("site_content").upsert({key,value:publicUrl,published:true,updated_at:new Date().toISOString()},{onConflict:"key"});
-        if(error) throw new Error(`site_content : ${error.message}`);
-        state.content[key]=publicUrl;
-      }
-
-      // Les 80 images alimentent automatiquement la galerie Supabase.
-      if(/^\d+\.jpg$/.test(fileName)){
-        const order=Number(fileName.replace(".jpg",""));
-        const {data:existing,error:findError}=await sb.from("models").select("id").eq("sort_order",order).maybeSingle();
-        if(findError) throw new Error(`Galerie : ${findError.message}`);
-        const payload={title:`Réalisation ${order}`,description:"",image_url:publicUrl,sort_order:order,published:true,updated_at:new Date().toISOString()};
-        const result=existing?.id
-          ? await sb.from("models").update(payload).eq("id",existing.id)
-          : await sb.from("models").insert(payload);
-        if(result.error) throw new Error(`Galerie : ${result.error.message}`);
-      }
-      done++;
-    }catch(e){
-      const msg=`${fileName}: ${e?.message || e}`;
-      // Un fichier absent est simplement ignoré : les autres fichiers continuent.
-      if(String(e?.message||e).startsWith("HTTP 404")) skipped++;
-      else { errors++; details.push(msg); console.warn("Synchronisation échouée",msg); }
+  async function findRootFile(name){
+    for(const fileName of candidates(name)){
+      try{
+        const url=new URL(fileName,document.baseURI).href;
+        const response=await fetch(url,{cache:"no-store",credentials:"same-origin"});
+        if(response.ok){
+          const blob=await response.blob();
+          if(blob.size) return {fileName,blob};
+        }
+      }catch(_e){}
     }
-    const pct=Math.round((index/total)*100);
-    if(progress) progress.style.width=pct+"%";
-    if(status) status.textContent=`Synchronisation ${index}/${total} — ${done} envoyés, ${skipped} absents, ${errors} erreur(s).${details.length?" Dernière erreur : "+details[details.length-1]:""}`;
-  };
+    return null;
+  }
 
-  // 4 uploads simultanés maximum pour rester fiable sur mobile et éviter de saturer le navigateur.
-  const concurrency=4;
+  async function uploadFile(fileName,blob,kind,order=null){
+    const path=`site/${fileName}`;
+    const upload=await storage.upload(path,blob,{
+      contentType:blob.type || "image/jpeg",
+      upsert:true,
+      cacheControl:"31536000"
+    });
+    if(upload.error) throw upload.error;
+    const {data:pub}=storage.getPublicUrl(path);
+    const publicUrl=pub?.publicUrl;
+    if(!publicUrl) throw new Error("URL Supabase introuvable");
+
+    if(kind==="hero" || kind==="about"){
+      const key=kind==="hero" ? "hero_image_url" : "about_image_url";
+      const {error}=await sb.from("site_content").upsert({
+        key,value:publicUrl,published:true,updated_at:new Date().toISOString()
+      },{onConflict:"key"});
+      if(error) throw error;
+      state.content[key]=publicUrl;
+      return;
+    }
+
+    const {data:existing,error:findError}=await sb.from("models")
+      .select("id")
+      .eq("sort_order",order)
+      .maybeSingle();
+    if(findError) throw findError;
+
+    const payload={
+      title:`Réalisation ${order}`,
+      description:"",
+      image_url:publicUrl,
+      sort_order:order,
+      published:true,
+      updated_at:new Date().toISOString()
+    };
+    const result=existing?.id
+      ? await sb.from("models").update(payload).eq("id",existing.id)
+      : await sb.from("models").insert(payload);
+    if(result.error) throw result.error;
+  }
+
+  async function processOne(task){
+    try{
+      const found=await findRootFile(task.name);
+      if(!found){ missing++; return; }
+      await uploadFile(found.fileName,found.blob,task.kind,task.order);
+      uploaded++;
+    }catch(error){
+      failed++;
+      console.error("Synchronisation Supabase:",task.name,error);
+    }finally{
+      processed++;
+      if(progress) progress.style.width=Math.round(processed/total*100)+"%";
+      if(status) status.textContent=`${processed}/${total} • ${uploaded} synchronisées • ${missing} absentes • ${failed} erreurs`;
+    }
+  }
+
+  const tasks=[
+    {name:"hero",kind:"hero"},
+    {name:"about",kind:"about"},
+    ...Array.from({length:80},(_,i)=>({name:String(i+1),kind:"model",order:i+1}))
+  ];
+
+  // Synchronisation réelle : les blobs des fichiers racine sont envoyés directement au Storage Supabase.
   let cursor=0;
   const worker=async()=>{
     while(true){
       const i=cursor++;
-      if(i>=files.length) return;
-      await uploadOne(files[i],i+1,files.length);
+      if(i>=tasks.length) return;
+      await processOne(tasks[i]);
     }
   };
-  await Promise.all(Array.from({length:concurrency},worker));
+  await Promise.all(Array.from({length:5},worker));
 
+  if(progress) progress.style.width="100%";
   if(btn) btn.disabled=false;
-  renderAll();
   await loadAdminData({skipSync:true});
-  setStatus("importStatus",`Synchronisation terminée : ${done} fichier(s) envoyés dans Supabase.${errors?` ${errors} erreur(s) à vérifier.`:""}`,errors===0);
+  renderAll();
+  setStatus(
+    "importStatus",
+    `Terminé • ${uploaded} synchronisées • ${missing} absentes • ${failed} erreurs`,
+    failed===0
+  );
 }
 
 async function importRootImages(){ return syncRootImages({manual:true}); }
