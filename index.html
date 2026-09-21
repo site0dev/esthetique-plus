@@ -130,11 +130,12 @@ footer p{color:#aaa;line-height:1.7}
 .field input,.field textarea,.field select{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:5px;background:white;outline:none}
 .field textarea{min-height:105px;resize:vertical}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
-.admin-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;position:relative;z-index:5;pointer-events:auto}
-.tab-btn{border:1px solid #ccc;background:white;padding:9px 12px;border-radius:5px;cursor:pointer;position:relative;z-index:6;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.admin-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;position:relative;z-index:20;pointer-events:auto}
+.tab-btn{appearance:none;-webkit-appearance:none;border:1px solid #ccc;background:white;padding:12px 16px;border-radius:8px;cursor:pointer;position:relative;z-index:21;display:inline-flex;align-items:center;justify-content:center;min-height:48px;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.08);user-select:none;-webkit-user-select:none}
 .tab-btn.active{background:#171717;color:white;border-color:#171717}
 .admin-section{display:none}
 .admin-section.active{display:block}
+.admin-section[hidden]{display:none!important}
 .admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
 .admin-card{background:white;border:1px solid var(--line);padding:18px;border-radius:7px}
 .admin-card h3{margin:0 0 15px;font-size:1.05rem}
@@ -352,12 +353,12 @@ footer p{color:#aaa;line-height:1.7}
 
       <div id="adminView" class="hidden">
         <div class="admin-tabs">
-          <button class="tab-btn active" data-tab="contentTab">Contenu</button>
-          <button class="tab-btn" data-tab="galleryTab">Galerie / images</button>
-          <button class="tab-btn" data-tab="servicesTab">Services</button>
-          <button class="tab-btn" data-tab="stepsTab">Étapes</button>
-          <button class="tab-btn" data-tab="contactTab">Contact</button>
-          <button class="tab-btn" data-tab="accountTab">Compte</button>
+          <button type="button" class="tab-btn active" data-tab="contentTab">Contenu</button>
+          <button type="button" class="tab-btn" data-tab="galleryTab">Galerie / images</button>
+          <button type="button" class="tab-btn" data-tab="servicesTab">Services</button>
+          <button type="button" class="tab-btn" data-tab="stepsTab">Étapes</button>
+          <button type="button" class="tab-btn" data-tab="contactTab">Contact</button>
+          <button type="button" class="tab-btn" data-tab="accountTab">Compte</button>
           <button class="btn btn-small btn-danger" id="logoutBtn" style="margin-left:auto">Déconnexion</button>
         </div>
 
@@ -929,31 +930,49 @@ document.getElementById("addStepBtn").addEventListener("click",async()=>{
 });
 
 function switchAdminTab(button){
-  if(!button || !button.dataset.tab) return;
-  const targetId=button.dataset.tab;
+  if(!button) return;
+  const targetId=button.getAttribute("data-tab");
+  if(!targetId) return;
   const target=document.getElementById(targetId);
   if(!target) return;
-  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.toggle("active",x===button));
-  document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
-  target.classList.add("active");
-  target.scrollIntoView({behavior:"smooth",block:"start"});
+
+  document.querySelectorAll("#adminView .tab-btn").forEach(function(tab){
+    tab.classList.toggle("active", tab === button);
+    tab.setAttribute("aria-selected", tab === button ? "true" : "false");
+  });
+
+  document.querySelectorAll("#adminView .admin-section").forEach(function(section){
+    section.classList.toggle("active", section === target);
+    section.hidden = section !== target;
+  });
+
+  /* On ne fait pas de scroll automatique : sur Android il pouvait donner
+     l'impression que le bouton n'avait pas été pris en compte. */
+  target.hidden=false;
 }
 
-/* Navigation administration robuste sur mobile : délégation d'événement. */
-document.getElementById("adminView").addEventListener("click",e=>{
-  const button=e.target.closest(".tab-btn");
-  if(!button) return;
-  e.preventDefault();
-  e.stopPropagation();
-  switchAdminTab(button);
+/* Un seul gestionnaire pointer : fonctionne au doigt, au stylet et à la souris
+   sans double déclenchement click/touchend. */
+document.querySelectorAll("#adminView .tab-btn").forEach(function(button){
+  button.setAttribute("aria-selected", button.classList.contains("active") ? "true" : "false");
+  button.addEventListener("pointerup", function(e){
+    if(e.pointerType === "mouse" && e.button !== 0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    switchAdminTab(button);
+  });
 });
 
-document.getElementById("adminView").addEventListener("touchend",e=>{
-  const button=e.target.closest(".tab-btn");
-  if(!button) return;
-  e.preventDefault();
-  switchAdminTab(button);
-},{passive:false});
+/* Compatibilité anciens navigateurs Android : click uniquement si PointerEvent
+   n'est pas disponible. */
+if(!window.PointerEvent){
+  document.querySelectorAll("#adminView .tab-btn").forEach(function(button){
+    button.addEventListener("click", function(e){
+      e.preventDefault();
+      switchAdminTab(button);
+    });
+  });
+}
 
 async function importRootImages(){
   const btn=document.getElementById("importRootBtn");
