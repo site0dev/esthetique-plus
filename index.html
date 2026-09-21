@@ -443,8 +443,8 @@ footer p{color:#aaa;line-height:1.7}
    CONFIGURATION SUPABASE
    Remplace uniquement ces 2 valeurs.
    ========================================================= */
-const SUPABASE_URL = "COLLE_ICI_URL_SUPABASE";
-const SUPABASE_ANON_KEY = "COLLE_ICI_CLE_ANON_SUPABASE";
+const SUPABASE_URL = "https://ttawjocrltvrpyglahej.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_GRfTYtTDkX4mn6in8f7BNg_H44Sio-L";
 
 const hasSupabase = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("COLLE_ICI");
 const sb = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
