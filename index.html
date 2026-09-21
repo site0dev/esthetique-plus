@@ -4,272 +4,269 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Esthétique Plus | Parakou</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-:root{--accent:#b7792b;--accent2:#925d1e;--ink:#161616;--muted:#737373;--line:#e9e7e3;--soft:#f7f5f1}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:Arial,Helvetica,sans-serif;background:#fff}a{text-decoration:none;color:inherit}button,input,textarea{font:inherit}.container{width:min(1180px,calc(100% - 28px));margin:auto}
-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.nav{height:74px;display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{display:flex;flex-direction:column;line-height:1.05;cursor:pointer;user-select:none}.brand strong{font-size:1.2rem}.brand small{font-size:.63rem;letter-spacing:.15em;color:#888;margin-top:5px;text-transform:uppercase}
-.call{background:#151515;color:#fff;padding:12px 18px;border-radius:999px;font-weight:700}
-.hero{min-height:650px;position:relative;color:#fff;display:flex;align-items:center;overflow:hidden}.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.76),rgba(0,0,0,.25))}
-.hero-content{position:relative;z-index:2;padding:90px 0;max-width:820px}.eyebrow{color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.hero .eyebrow{color:#e7b872}.hero h1{font-family:Georgia,serif;font-size:clamp(3rem,7vw,6.2rem);line-height:1.02;margin:14px 0 20px}.hero p{font-size:clamp(1rem,2vw,1.25rem);max-width:650px;color:#eee}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{border:0;border-radius:999px;padding:14px 22px;font-weight:700;cursor:pointer;display:inline-flex;justify-content:center;align-items:center}.primary{background:var(--accent);color:#fff}.glass{background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.45)}
-section{padding:90px 0}.soft{background:var(--soft)}.heading{display:grid;grid-template-columns:1fr minmax(280px,440px);gap:40px;align-items:end;margin-bottom:38px}.heading h2{font-family:Georgia,serif;font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;margin:10px 0 0}.heading p{color:var(--muted);margin:0}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.card{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 35px rgba(0,0,0,.05)}.card img{width:100%;aspect-ratio:4/3;object-fit:cover}.card-body{padding:17px}.card h3{margin:0 0 7px}.card p{margin:0;color:var(--muted);font-size:.9rem}.service{padding:25px;border:1px solid var(--line);border-radius:20px;background:#fff}.service .icon{color:var(--accent);font-size:1.5rem;margin-bottom:15px}.service h3{margin:0 0 7px}.service p{margin:0;color:var(--muted)}
-footer{background:#151515;color:#aaa;padding:60px 0}.footer-grid{display:grid;grid-template-columns:1.4fr .8fr 1fr;gap:35px}.footer-grid strong,.footer-grid a{color:#fff;display:block;margin-bottom:7px}.copyright{text-align:right;align-self:end;font-size:.8rem}.wa{position:fixed;right:18px;bottom:18px;width:58px;height:58px;border-radius:50%;background:#20b65a;color:#fff;display:grid;place-items:center;font-weight:800;z-index:90;box-shadow:0 8px 25px #0003}
-#adminPanel{display:none;position:fixed;inset:0;z-index:300;background:#f5f4f1;overflow:auto}.admin-head{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:14px;display:flex;justify-content:space-between;align-items:center}.admin-main{padding:28px 0 80px}.admin-section{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;margin-bottom:20px}.admin-section h2{margin:0 0 18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:grid;gap:6px;font-weight:700;font-size:.85rem}input,textarea{border:1px solid #ddd;border-radius:10px;padding:11px;width:100%}.span2{grid-column:span 2}.admin-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.admin-item{border:1px solid var(--line);border-radius:15px;overflow:hidden}.admin-item img{width:100%;aspect-ratio:16/10;object-fit:cover}.admin-item-body{padding:13px}.admin-item-body p{color:var(--muted);font-size:.85rem}.row{display:flex;gap:8px;flex-wrap:wrap}.mini{padding:8px 12px;border:0;border-radius:9px;cursor:pointer;font-weight:700}.edit{background:#eee}.del{background:#fee2e2;color:#991b1b}.message{min-height:22px;color:#777}.login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px}.login{background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;width:min(450px,100%);box-shadow:0 20px 70px #00000012}.login h2{font-family:Georgia,serif;font-size:2.3rem;margin:7px 0}.login form{display:grid;gap:15px}.close{background:#eee}.hidden{display:none!important}
-@media(max-width:950px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-list{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-grid{grid-template-columns:1fr 1fr}.copyright{text-align:left}}
-@media(max-width:640px){.container{width:calc(100% - 24px)}.nav{height:68px}.call{padding:10px 14px}.hero{min-height:600px}.hero-content{padding:75px 0}.actions .btn{width:100%}.heading{display:block}.heading p{margin-top:14px}.grid,.admin-list,.footer-grid,.form-grid{grid-template-columns:1fr}.span2{grid-column:auto}.admin-section{padding:17px}.brand strong{font-size:1rem}}
+:root{--accent:#b7791f;--dark:#171717}
+html{scroll-behavior:smooth}body{font-family:Inter,system-ui,-apple-system,sans-serif}
+.section{padding:5rem 1rem}.container{max-width:1180px;margin:auto}
+.grid-auto{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem}
+@media(max-width:1000px){.grid-auto{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.grid-auto{grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}}
+@media(max-width:430px){.grid-auto{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #eee;border-radius:1rem;overflow:hidden;box-shadow:0 8px 30px #00000008}
+.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media(max-width:700px){.admin-grid{grid-template-columns:1fr}}
+.field{width:100%;border:1px solid #ddd;border-radius:.75rem;padding:.75rem 1rem;background:#fff}
+.admin-tab.active{background:#171717;color:#fff}
 </style>
 </head>
-<body>
+<body class="bg-stone-50 text-stone-800">
 
-<header id="siteHeader">
-  <div class="container nav">
-    <!-- 3 clics rapides dans cette zone en moins de 2 secondes ouvrent l'administration -->
-    <a id="adminTrigger" class="brand" href="#" aria-label="Esthétique Plus">
-      <strong id="brandName">Esthétique Plus</strong>
-      <small id="brandLocation">Parakou · Bénin</small>
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b">
+  <div class="container h-20 px-4 flex items-center justify-between gap-4">
+    <a id="adminTrigger" href="#" class="shrink-0 select-none">
+      <div class="text-xl sm:text-2xl font-black"><span id="brandName">Esthétique</span> <span class="text-stone-900" id="brandName2">Plus</span></div>
+      <div id="brandLocation" class="text-[10px] uppercase tracking-[.2em] text-stone-400">Parakou · Bénin</div>
     </a>
-    <a id="headerPhone" class="call" href="tel:+2290194870650">Appeler</a>
+    <nav class="hidden lg:flex items-center gap-5 text-sm font-semibold">
+      <a href="#accueil">Accueil</a><a href="#services">Services</a><a href="#realisations">Réalisations</a><a href="#apropos">À propos</a><a href="#contact">Contact</a>
+    </nav>
+    <a id="headerPhone" href="tel:+2290194870650" class="bg-stone-900 text-white px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap"><i class="fa-solid fa-phone mr-2"></i><span>Appeler</span></a>
   </div>
 </header>
 
-<main id="publicSite">
-<section class="hero">
-  <img id="heroImage" src="hero.jpg" alt="Esthétique Plus">
-  <div class="container hero-content">
-    <span class="eyebrow" id="heroEyebrow">Esthétique Plus</span>
-    <h1 id="heroTitle">Espaces d'exception</h1>
-    <p id="heroText">Donnez une seconde vie à vos bâtiments, maisons et bureaux.</p>
-    <div class="actions">
-      <a class="btn primary" href="#galerie">Explorer la galerie</a>
-      <a id="heroPhone" class="btn glass" href="tel:+2290194870650">Nous appeler</a>
+<main>
+<section id="accueil" class="relative min-h-[620px] flex items-center text-white overflow-hidden">
+  <img id="heroImage" src="hero.jpg" class="absolute inset-0 w-full h-full object-cover" alt="">
+  <div class="absolute inset-0 bg-black/55"></div>
+  <div class="relative container px-4 py-24">
+    <div class="max-w-3xl">
+      <p id="heroEyebrow" class="uppercase tracking-[.25em] text-amber-300 text-sm font-bold mb-5">Esthétique Plus</p>
+      <h1 id="heroTitle" class="text-4xl sm:text-6xl font-black leading-tight mb-6">Espaces d'exception</h1>
+      <p id="heroText" class="text-lg sm:text-xl text-white/90 max-w-2xl mb-8">Donnez une seconde vie à vos bâtiments, maisons et bureaux.</p>
+      <div class="flex flex-wrap gap-3">
+        <a id="heroButton1" href="#realisations" class="bg-amber-600 hover:bg-amber-700 px-6 py-3 rounded-xl font-bold">Découvrir nos réalisations</a>
+        <a id="heroButton2" href="#contact" class="border border-white/60 hover:bg-white hover:text-stone-900 px-6 py-3 rounded-xl font-bold">Nous contacter</a>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="galerie">
+<section id="services" class="section bg-white">
  <div class="container">
-  <div class="heading"><div><span class="eyebrow">Nos réalisations</span><h2>Des projets qui parlent d'eux-mêmes.</h2></div><p id="galleryIntro">Découvrez nos réalisations et contactez directement l'atelier.</p></div>
-  <div id="gallery" class="grid"></div>
+  <div class="max-w-2xl mb-10"><p id="servicesEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Notre savoir-faire</p><h2 id="servicesTitle" class="text-3xl sm:text-4xl font-black mt-2">Nos services</h2><p id="servicesIntro" class="text-stone-500 mt-3">Des solutions adaptées à chaque espace et à chaque projet.</p></div>
+  <div id="servicesGrid" class="grid-auto"></div>
  </div>
 </section>
 
-<section class="soft">
+<section id="realisations" class="section bg-stone-50">
  <div class="container">
-  <div class="heading" style="display:block;text-align:center"><span class="eyebrow">Notre savoir-faire</span><h2>Un accompagnement de qualité.</h2></div>
-  <div id="services" class="grid"></div>
+  <div class="max-w-2xl mb-10"><p id="galleryEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Portfolio</p><h2 id="galleryTitle" class="text-3xl sm:text-4xl font-black mt-2">Nos réalisations</h2><p id="galleryIntro" class="text-stone-500 mt-3">Découvrez nos modèles et nos réalisations.</p></div>
+  <div id="modelsGrid" class="grid-auto"></div>
+ </div>
+</section>
+
+<section id="apropos" class="section bg-white">
+ <div class="container">
+  <div class="grid lg:grid-cols-2 gap-12 items-center">
+   <div><p id="aboutEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Notre identité</p><h2 id="aboutTitle" class="text-3xl sm:text-4xl font-black mt-2">Un atelier à votre écoute</h2><p id="aboutText" class="text-stone-600 mt-5 leading-8">Nous concevons et transformons les espaces avec une attention particulière portée aux détails, aux finitions et aux besoins de chaque client.</p></div>
+   <div class="rounded-3xl overflow-hidden aspect-[4/3] bg-stone-200"><img id="aboutImage" src="about.jpg" class="w-full h-full object-cover" alt=""></div>
+  </div>
+ </div>
+</section>
+
+<section id="etapes" class="section bg-stone-900 text-white">
+ <div class="container">
+  <div class="max-w-2xl mb-10"><p id="stepsEyebrow" class="text-amber-300 font-bold uppercase tracking-widest text-xs">Notre méthode</p><h2 id="stepsTitle" class="text-3xl sm:text-4xl font-black mt-2">Comment ça marche</h2><p id="stepsIntro" class="text-white/60 mt-3">Un accompagnement simple, clair et personnalisé.</p></div>
+  <div id="stepsGrid" class="grid-auto"></div>
+ </div>
+</section>
+
+<section id="contact" class="section bg-white">
+ <div class="container">
+  <div class="grid lg:grid-cols-2 gap-10">
+   <div><p id="contactEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Parlons de votre projet</p><h2 id="contactTitle" class="text-3xl sm:text-4xl font-black mt-2">Contactez-nous</h2><p id="contactText" class="text-stone-500 mt-4">Échangez directement avec notre équipe pour présenter votre projet.</p></div>
+   <div id="contactCards" class="grid sm:grid-cols-2 gap-4"></div>
+  </div>
  </div>
 </section>
 </main>
 
-<footer>
- <div class="container footer-grid">
-  <div><strong id="footerName">Esthétique Plus</strong><span id="footerDescription">Atelier d'aménagement d'espaces.</span><div id="footerAddress">Parakou, Bénin</div></div>
-  <div><strong>Contact</strong><a id="footerPhone" href="tel:+2290194870650">+229 01 94 87 06 50</a><a id="footerWhatsapp" href="https://wa.me/22994870650">WhatsApp</a></div>
-  <div class="copyright">© <span id="year"></span> Esthétique Plus. Tous droits réservés.</div>
+<footer class="bg-stone-950 text-white py-12">
+ <div class="container px-4 grid md:grid-cols-3 gap-8">
+  <div><h3 id="footerName" class="font-black text-xl">Esthétique Plus</h3><p id="footerText" class="text-white/50 mt-2">Atelier d'aménagement d'espaces.</p></div>
+  <div><h4 id="footerContactTitle" class="font-bold">Contact</h4><p id="footerAddress" class="text-white/60 mt-2"></p><p id="footerPhone" class="text-white/60 mt-1"></p><p id="footerWhatsapp" class="text-white/60 mt-1"></p></div>
+  <div><p id="footerCopyright" class="text-white/40 text-sm md:text-right">© 2026 Esthétique Plus. Tous droits réservés.</p></div>
  </div>
 </footer>
-<a id="floatingWhatsapp" class="wa" href="https://wa.me/22994870650" target="_blank">WA</a>
 
-<div id="adminPanel">
- <div id="loginView" class="login-wrap">
-  <div class="login">
-   <span class="eyebrow">Administration</span><h2>Connexion</h2>
-   <p>Accès sécurisé par Supabase Auth.</p>
-   <form id="loginForm">
-    <label>Email<input id="adminEmail" type="email" required autocomplete="email"></label>
-    <label>Mot de passe<input id="adminPassword" type="password" required autocomplete="current-password"></label>
-    <button class="btn primary" type="submit">Se connecter</button>
-   </form>
-   <div id="loginMessage" class="message"></div>
-   <button id="backPublic" class="btn close">Retour au site</button>
+<a id="floatingWhatsapp" href="https://wa.me/22994870650" target="_blank" class="fixed right-5 bottom-5 z-30 w-14 h-14 rounded-full bg-green-500 text-white flex items-center justify-center shadow-xl"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+
+<div id="adminModal" class="hidden fixed inset-0 z-[100] bg-black/70 p-3 sm:p-6 overflow-y-auto">
+ <div class="max-w-6xl mx-auto bg-stone-50 rounded-3xl min-h-full sm:min-h-0 shadow-2xl">
+  <div class="sticky top-0 bg-white rounded-t-3xl border-b px-5 py-4 flex items-center justify-between z-10">
+   <div><h2 class="text-xl font-black">Administration</h2><p id="adminStatus" class="text-xs text-stone-500">Connexion Supabase requise</p></div>
+   <button id="closeAdmin" class="w-10 h-10 rounded-full bg-stone-100 text-xl">&times;</button>
   </div>
- </div>
-
- <div id="dashboard" class="hidden">
-  <div class="admin-head"><strong>Administration — Esthétique Plus</strong><div class="row"><button id="logout" class="mini close">Déconnexion</button><button id="closeAdmin" class="mini close">Site public</button></div></div>
-  <div class="container admin-main">
-   <div id="saveMessage" class="message"></div>
-
-   <section class="admin-section">
-    <h2>Contenu général</h2>
-    <form id="siteForm" class="form-grid">
-     <label>Nom du site<input name="site_name"></label>
-     <label>Localisation<input name="location"></label>
-     <label>Téléphone<input name="phone"></label>
-     <label>WhatsApp<input name="whatsapp"></label>
-     <label>Image Hero — URL<input name="hero_image_url" type="url"></label>
-     <label>Texte footer<input name="footer_description"></label>
-     <label class="span2">Titre Hero<input name="hero_title"></label>
-     <label class="span2">Texte Hero<textarea name="hero_text" rows="3"></textarea></label>
-     <label class="span2">Introduction galerie<textarea name="gallery_intro" rows="3"></textarea></label>
-     <button class="btn primary span2" type="submit">Enregistrer toutes les modifications</button>
-    </form>
-   </section>
-
-   <section class="admin-section"><div class="row" style="justify-content:space-between"><h2>Galerie</h2><button id="addModel" class="mini edit">+ Ajouter</button></div><div id="modelsAdmin" class="admin-list"></div></section>
-   <section class="admin-section"><div class="row" style="justify-content:space-between"><h2>Services</h2><button id="addService" class="mini edit">+ Ajouter</button></div><div id="servicesAdmin" class="admin-list"></div></section>
+  <div id="loginBox" class="max-w-md mx-auto p-6 sm:p-10">
+   <h3 class="text-2xl font-black mb-2">Connexion administrateur</h3>
+   <p class="text-stone-500 text-sm mb-6">Authentification sécurisée par Supabase Auth.</p>
+   <form id="loginForm" class="space-y-4">
+    <input id="loginEmail" type="email" class="field" placeholder="Email administrateur" required>
+    <input id="loginPassword" type="password" class="field" placeholder="Mot de passe" required>
+    <button class="w-full bg-stone-900 text-white rounded-xl py-3 font-bold">Se connecter</button>
+    <p id="loginMessage" class="text-sm"></p>
+   </form>
+  </div>
+  <div id="adminApp" class="hidden">
+   <div class="p-4 flex flex-wrap gap-2 border-b bg-white">
+    <button class="admin-tab active px-4 py-2 rounded-xl text-sm font-bold" data-tab="content">Contenu</button>
+    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="models">Modèles</button>
+    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="services">Services</button>
+    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="steps">Étapes</button>
+    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="contact">Contact</button>
+    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="account">Connexion</button>
+    <button id="logoutBtn" class="ml-auto px-4 py-2 rounded-xl text-sm font-bold border">Déconnexion</button>
+   </div>
+   <div class="p-5 sm:p-8">
+    <section data-panel="content">
+     <h3 class="text-2xl font-black mb-6">Tous les textes et images</h3>
+     <form id="contentForm" class="admin-grid"></form>
+    </section>
+    <section data-panel="models" class="hidden">
+     <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-black">Modèles / galerie</h3><button id="addModel" class="bg-stone-900 text-white px-4 py-2 rounded-xl font-bold">+ Ajouter</button></div>
+     <div id="modelsAdminGrid" class="grid-auto"></div>
+    </section>
+    <section data-panel="services" class="hidden">
+     <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-black">Services</h3><button id="addService" class="bg-stone-900 text-white px-4 py-2 rounded-xl font-bold">+ Ajouter</button></div>
+     <div id="servicesAdminGrid" class="grid-auto"></div>
+    </section>
+    <section data-panel="steps" class="hidden">
+     <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-black">Étapes</h3><button id="addStep" class="bg-stone-900 text-white px-4 py-2 rounded-xl font-bold">+ Ajouter</button></div>
+     <div id="stepsAdminGrid" class="grid-auto"></div>
+    </section>
+    <section data-panel="contact" class="hidden">
+     <h3 class="text-2xl font-black mb-5">Informations de contact</h3><form id="contactForm" class="admin-grid"></form>
+    </section>
+    <section data-panel="account" class="hidden">
+     <h3 class="text-2xl font-black mb-2">Informations de connexion</h3>
+     <p class="text-stone-500 text-sm mb-6">Modifiez l'adresse email ou le mot de passe du compte actuellement connecté.</p>
+     <form id="accountForm" class="max-w-xl space-y-4">
+      <input id="newEmail" type="email" class="field" placeholder="Nouvel email">
+      <input id="newPassword" type="password" minlength="8" class="field" placeholder="Nouveau mot de passe (8 caractères minimum)">
+      <button class="bg-stone-900 text-white px-5 py-3 rounded-xl font-bold">Enregistrer</button><p id="accountMessage" class="text-sm"></p>
+     </form>
+    </section>
+   </div>
   </div>
  </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* =========================
-   SUPABASE — À REMPLACER
-   ========================= */
-const SUPABASE_URL = "COLLE_ICI_URL_SUPABASE";
-const SUPABASE_ANON_KEY = "COLLE_ICI_CLE_ANON_SUPABASE";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const SUPABASE_URL="COLLE_ICI_URL_SUPABASE";
+const SUPABASE_ANON_KEY="COLLE_ICI_CLE_ANON_SUPABASE";
+const supabaseReady=SUPABASE_URL.startsWith("https://")&&!SUPABASE_URL.includes("COLLE_ICI")&&!SUPABASE_ANON_KEY.includes("COLLE_ICI");
+const sb=supabaseReady?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-const phone=v=>"tel:"+String(v||"").replace(/[^\d+]/g,"");
-const wa=v=>"https://wa.me/"+String(v||"").replace(/\D/g,"");
-
-let triggerClicks=[];
-let editingType=null;
-
-$("year").textContent=new Date().getFullYear();
-
-/* 3 clics en moins de 2 secondes dans l'entête à gauche */
-$("adminTrigger").addEventListener("click",e=>{
-  e.preventDefault();
-  const now=Date.now();
-  triggerClicks=triggerClicks.filter(t=>now-t<2000);
-  triggerClicks.push(now);
-  if(triggerClicks.length>=3){triggerClicks=[];openAdmin();}
-});
-
-function openAdmin(){
-  $("adminPanel").style.display="block";
-  document.body.style.overflow="hidden";
-  checkSession();
-}
-function closeAdmin(){
-  $("adminPanel").style.display="none";
-  document.body.style.overflow="";
-}
-$("closeAdmin").onclick=closeAdmin;
-$("backPublic").onclick=closeAdmin;
-
-async function checkSession(){
-  const {data}=await supabaseClient.auth.getSession();
-  if(data.session){showDashboard();loadAdmin();}
-  else{ $("loginView").classList.remove("hidden"); $("dashboard").classList.add("hidden");}
-}
-function showDashboard(){$("loginView").classList.add("hidden");$("dashboard").classList.remove("hidden");}
-function message(id,text,bad=false){$(id).textContent=text;$(id).style.color=bad?"#b91c1c":"#777";}
-
-$("loginForm").onsubmit=async e=>{
- e.preventDefault();message("loginMessage","Connexion...");
- const {error}=await supabaseClient.auth.signInWithPassword({email:$("adminEmail").value,password:$("adminPassword").value});
- if(error){message("loginMessage",error.message,true);return}
- message("loginMessage","");showDashboard();await loadAdmin();
+const textKeys=[
+["brand_name","Nom du site","text"],["location","Localisation","text"],["hero_eyebrow","Hero — petit titre","text"],["hero_title","Hero — grand titre","text"],["hero_text","Hero — texte","textarea"],["hero_button_1","Hero — bouton 1","text"],["hero_button_2","Hero — bouton 2","text"],["hero_image_url","Hero — URL image","text"],
+["services_eyebrow","Services — petit titre","text"],["services_title","Services — titre","text"],["services_intro","Services — introduction","textarea"],["gallery_eyebrow","Galerie — petit titre","text"],["gallery_title","Galerie — titre","text"],["gallery_intro","Galerie — introduction","textarea"],
+["about_eyebrow","À propos — petit titre","text"],["about_title","À propos — titre","text"],["about_text","À propos — texte","textarea"],["about_image_url","À propos — URL image","text"],
+["steps_eyebrow","Étapes — petit titre","text"],["steps_title","Étapes — titre","text"],["steps_intro","Étapes — introduction","textarea"],["contact_eyebrow","Contact — petit titre","text"],["contact_title","Contact — titre","text"],["contact_text","Contact — texte","textarea"],
+["footer_text","Footer — texte","textarea"],["footer_contact_title","Footer — titre contact","text"],["footer_copyright","Footer — copyright","text"]
+];
+const defaults={
+brand_name:"Esthétique Plus",location:"Parakou · Bénin",hero_eyebrow:"Esthétique Plus",hero_title:"Espaces d'exception",hero_text:"Donnez une seconde vie à vos bâtiments, maisons et bureaux.",hero_button_1:"Découvrir nos réalisations",hero_button_2:"Nous contacter",hero_image_url:"hero.jpg",
+services_eyebrow:"Notre savoir-faire",services_title:"Nos services",services_intro:"Des solutions adaptées à chaque espace et à chaque projet.",gallery_eyebrow:"Portfolio",gallery_title:"Nos réalisations",gallery_intro:"Découvrez nos modèles et nos réalisations.",about_eyebrow:"Notre identité",about_title:"Un atelier à votre écoute",about_text:"Nous concevons et transformons les espaces avec une attention particulière portée aux détails, aux finitions et aux besoins de chaque client.",about_image_url:"about.jpg",steps_eyebrow:"Notre méthode",steps_title:"Comment ça marche",steps_intro:"Un accompagnement simple, clair et personnalisé.",contact_eyebrow:"Parlons de votre projet",contact_title:"Contactez-nous",contact_text:"Échangez directement avec notre équipe pour présenter votre projet.",footer_text:"Atelier d'aménagement d'espaces.",footer_contact_title:"Contact",footer_copyright:"© 2026 Esthétique Plus. Tous droits réservés."
 };
-$("logout").onclick=async()=>{await supabaseClient.auth.signOut();$("dashboard").classList.add("hidden");$("loginView").classList.remove("hidden")};
-supabaseClient.auth.onAuthStateChange((event,session)=>{
- if(session && $("adminPanel").style.display==="block"){showDashboard();}
-});
+const contactDefaults={phone:"+229 01 94 87 06 50",whatsapp:"22994870650",email:"",address:"Parakou, Bénin",contact_hours:"Lundi — Samedi"};
+let content={...defaults}, contact={...contactDefaults}, models=[], services=[], steps=[];
 
-async function loadPublic(){
- let settings={};
- const r=await supabaseClient.from("site_content").select("key,value").eq("published",true);
- if(!r.error)(r.data||[]).forEach(x=>settings[x.key]=x.value);
-
- const d={
-  site_name:settings.site_name||"Esthétique Plus",
-  location:settings.location||"Parakou · Bénin",
-  phone:settings.phone||"+229 01 94 87 06 50",
-  whatsapp:settings.whatsapp||"22994870650",
-  hero_image_url:settings.hero_image_url||"hero.jpg",
-  hero_title:settings.hero_title||"Espaces d'exception",
-  hero_text:settings.hero_text||"Donnez une seconde vie à vos bâtiments, maisons et bureaux.",
-  footer_description:settings.footer_description||"Atelier d'aménagement d'espaces.",
-  gallery_intro:settings.gallery_intro||"Découvrez nos réalisations et contactez directement l'atelier."
- };
- $("brandName").textContent=d.site_name;$("brandLocation").textContent=d.location;$("heroEyebrow").textContent=d.site_name;
- $("heroTitle").textContent=d.hero_title;$("heroText").textContent=d.hero_text;$("galleryIntro").textContent=d.gallery_intro;
- $("footerName").textContent=d.site_name;$("footerDescription").textContent=d.footer_description;$("footerAddress").textContent=d.location;
- $("heroImage").src=d.hero_image_url;$("headerPhone").href=phone(d.phone);$("heroPhone").href=phone(d.phone);$("footerPhone").href=phone(d.phone);$("footerPhone").textContent=d.phone;
- $("footerWhatsapp").href=wa(d.whatsapp);$("floatingWhatsapp").href=wa(d.whatsapp)+"?text="+encodeURIComponent("Bonjour Esthétique Plus, je souhaite des renseignements.");
- await loadPublicItems();
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+async function localFallback(){
+  const hero=document.getElementById("heroImage"), about=document.getElementById("aboutImage");
+  for(const el of [hero,about]){el.onerror=()=>{}}
+  document.getElementById("heroImage").src="hero.jpg";
+  document.getElementById("aboutImage").src="about.jpg";
+  if(!supabaseReady) document.getElementById("adminStatus").textContent="Mode temporaire — configurez Supabase pour activer l'administration.";
 }
-async function loadPublicItems(){
- const m=await supabaseClient.from("models").select("*").eq("published",true).order("sort_order");
- $("gallery").innerHTML="";
- if(!m.error)(m.data||[]).forEach(x=>{
-  const c=document.createElement("article");c.className="card";
-  c.innerHTML='<img src="'+esc(x.image_url)+'" alt="'+esc(x.title)+'"><div class="card-body"><h3>'+esc(x.title)+'</h3><p>'+esc(x.description)+'</p></div>';
-  $("gallery").appendChild(c);
- });
- const s=await supabaseClient.from("services").select("*").eq("published",true).order("sort_order");
- $("services").innerHTML="";
- if(!s.error)(s.data||[]).forEach(x=>{
-  const c=document.createElement("article");c.className="service";
-  c.innerHTML='<div class="icon">'+esc(x.icon||"✦")+'</div><h3>'+esc(x.title)+'</h3><p>'+esc(x.description)+'</p>';
-  $("services").appendChild(c);
- });
+function render(){
+  document.getElementById("brandName").textContent=(content.brand_name||"Esthétique Plus").split(" ")[0]||"Esthétique";
+  document.getElementById("brandName2").textContent=(content.brand_name||"Esthétique Plus").split(" ").slice(1).join(" ");
+  document.getElementById("brandLocation").textContent=content.location||"";
+  const map={heroEyebrow:"hero_eyebrow",heroTitle:"hero_title",heroText:"hero_text",heroButton1:"hero_button_1",heroButton2:"hero_button_2",servicesEyebrow:"services_eyebrow",servicesTitle:"services_title",servicesIntro:"services_intro",galleryEyebrow:"gallery_eyebrow",galleryTitle:"gallery_title",galleryIntro:"gallery_intro",aboutEyebrow:"about_eyebrow",aboutTitle:"about_title",aboutText:"about_text",stepsEyebrow:"steps_eyebrow",stepsTitle:"steps_title",stepsIntro:"steps_intro",contactEyebrow:"contact_eyebrow",contactTitle:"contact_title",contactText:"contact_text",footerName:"brand_name",footerText:"footer_text",footerContactTitle:"footer_contact_title",footerCopyright:"footer_copyright"};
+  Object.entries(map).forEach(([id,k])=>{const e=document.getElementById(id);if(e)e.textContent=content[k]||""});
+  document.getElementById("heroImage").src=content.hero_image_url||"hero.jpg";
+  document.getElementById("aboutImage").src=content.about_image_url||"about.jpg";
+  const clean=contact.phone.replace(/\s/g,"");document.getElementById("headerPhone").href="tel:"+clean;document.getElementById("footerPhone").textContent=contact.phone;document.getElementById("footerAddress").textContent=contact.address;document.getElementById("footerWhatsapp").textContent=contact.whatsapp?"WhatsApp : +"+contact.whatsapp:"";document.getElementById("floatingWhatsapp").href=contact.whatsapp?"https://wa.me/"+contact.whatsapp:"#";
+  document.getElementById("servicesGrid").innerHTML=services.map(s=>`<article class="card p-6"><div class="text-2xl text-amber-600">${esc(s.icon||"✦")}</div><h3 class="font-black text-lg mt-3">${esc(s.title)}</h3><p class="text-stone-500 text-sm mt-2 leading-6">${esc(s.description)}</p></article>`).join("")||`<div class="col-span-full text-stone-400">Ajoutez vos services dans l'administration.</div>`;
+  document.getElementById("modelsGrid").innerHTML=models.map(m=>`<article class="card"><img src="${esc(m.image_url)}" class="w-full aspect-square object-cover" alt="${esc(m.title)}"><div class="p-5"><h3 class="font-black">${esc(m.title)}</h3><p class="text-sm text-stone-500 mt-2">${esc(m.description)}</p><a href="https://wa.me/${contact.whatsapp}?text=${encodeURIComponent("Bonjour, je souhaite des renseignements sur "+m.title)}" target="_blank" class="inline-block mt-4 bg-stone-900 text-white px-4 py-2 rounded-lg text-sm font-bold">Commander</a></div></article>`).join("")||`<div class="col-span-full text-stone-400">Ajoutez vos réalisations dans l'administration.</div>`;
+  document.getElementById("stepsGrid").innerHTML=steps.map((s,i)=>`<article class="bg-white/5 border border-white/10 rounded-2xl p-6"><div class="text-amber-300 text-sm font-black">0${i+1}</div><h3 class="font-black text-lg mt-3">${esc(s.title)}</h3><p class="text-white/60 text-sm mt-2 leading-6">${esc(s.description)}</p></article>`).join("");
+  document.getElementById("contactCards").innerHTML=[["fa-phone","Téléphone",contact.phone,"tel:"+contact.phone.replace(/\s/g,"")],["fa-whatsapp","WhatsApp","+"+contact.whatsapp,"https://wa.me/"+contact.whatsapp],["fa-location-dot","Adresse",contact.address,"#"],["fa-clock","Horaires",contact.contact_hours,"#"]].map(x=>`<a href="${esc(x[3])}" class="card p-5"><i class="fa-solid ${x[0]} text-amber-600"></i><div class="font-bold mt-3">${x[1]}</div><div class="text-sm text-stone-500 mt-1">${esc(x[2])}</div></a>`).join("");
 }
-
-/* ADMIN */
-async function loadAdmin(){
- const r=await supabaseClient.from("site_content").select("key,value");
- if(r.error){message("saveMessage",r.error.message,true);return}
- const obj={};(r.data||[]).forEach(x=>obj[x.key]=x.value);
- [...$("siteForm").elements].forEach(x=>{if(x.name&&obj[x.name]!==undefined)x.value=obj[x.name]});
- await Promise.all([loadAdminItems("models"),loadAdminItems("services")]);
+async function loadData(){
+  if(!sb){models=[];services=[];steps=[];render();return}
+  const [c,m,s,t,ct]=await Promise.all([
+    sb.from("site_content").select("key,value").eq("published",true),
+    sb.from("models").select("*").eq("published",true).order("sort_order"),
+    sb.from("services").select("*").eq("published",true).order("sort_order"),
+    sb.from("experience_steps").select("*").eq("published",true).order("sort_order"),
+    sb.from("contact_settings").select("key,value").eq("published",true)
+  ]);
+  if(!c.error)c.data.forEach(x=>content[x.key]=x.value);
+  if(!m.error)models=m.data||[]; if(!s.error)services=s.data||[]; if(!t.error)steps=t.data||[]; if(!ct.error)ct.data.forEach(x=>contact[x.key]=x.value);
+  render();
 }
-$("siteForm").onsubmit=async e=>{
- e.preventDefault();
- const fd=new FormData(e.target),rows=[];
- for(const [key,value] of fd.entries())rows.push({key,value,published:true});
- const r=await supabaseClient.from("site_content").upsert(rows,{onConflict:"key"});
- if(r.error){message("saveMessage",r.error.message,true);return}
- message("saveMessage","Modifications enregistrées dans Supabase.");await loadPublic();
+async function isAdmin(){
+  if(!sb)return false;
+  const {data:{user}}=await sb.auth.getUser(); if(!user)return false;
+  const {data}=await sb.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle(); return !!data;
+}
+function openAdmin(){document.getElementById("adminModal").classList.remove("hidden")}
+document.getElementById("adminTrigger").onclick=e=>{e.preventDefault();openAdmin()}
+document.getElementById("closeAdmin").onclick=()=>document.getElementById("adminModal").classList.add("hidden");
+document.querySelectorAll(".admin-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("[data-panel]").forEach(p=>p.classList.toggle("hidden",p.dataset.panel!==b.dataset.tab))});
+document.getElementById("loginForm").onsubmit=async e=>{
+ e.preventDefault();const msg=document.getElementById("loginMessage");
+ if(!sb){msg.textContent="Configurez d'abord l'URL et la clé anon Supabase dans index.html.";msg.className="text-sm text-red-600";return}
+ const {error}=await sb.auth.signInWithPassword({email:loginEmail.value,password:loginPassword.value});
+ if(error){msg.textContent=error.message;return}
+ if(!(await isAdmin())){await sb.auth.signOut();msg.textContent="Ce compte n'est pas autorisé comme administrateur.";return}
+ document.getElementById("loginBox").classList.add("hidden");document.getElementById("adminApp").classList.remove("hidden");document.getElementById("adminStatus").textContent="Administrateur connecté";await adminLoad();
 };
-async function loadAdminItems(type){
- const box=$(type==="models"?"modelsAdmin":"servicesAdmin");
- const r=await supabaseClient.from(type).select("*").order("sort_order");
- if(r.error){box.innerHTML="<p>"+esc(r.error.message)+"</p>";return}
- box.innerHTML="";
- (r.data||[]).forEach(x=>{
-  const c=document.createElement("article");c.className="admin-item";
-  c.innerHTML=(type==="models"&&x.image_url?'<img src="'+esc(x.image_url)+'" alt="">':"")+
-  '<div class="admin-item-body"><strong>'+esc(x.title)+'</strong><p>'+esc(x.description)+'</p><div class="row"><button class="mini edit">Modifier</button><button class="mini del">Supprimer</button></div></div>';
-  c.querySelector(".edit").onclick=()=>editItem(type,x);
-  c.querySelector(".del").onclick=()=>deleteItem(type,x.id);
-  box.appendChild(c);
- });
+async function adminLoad(){
+ const c=await sb.from("site_content").select("key,value");if(!c.error)c.data.forEach(x=>content[x.key]=x.value);
+ const ct=await sb.from("contact_settings").select("key,value");if(!ct.error)ct.data.forEach(x=>contact[x.key]=x.value);
+ const [m,s,t]=await Promise.all([sb.from("models").select("*").order("sort_order"),sb.from("services").select("*").order("sort_order"),sb.from("experience_steps").select("*").order("sort_order")]);
+ models=m.data||[];services=s.data||[];steps=t.data||[];renderAdmin();
 }
-function editItem(type,x={}){
- editingType=type;
- const title=prompt("Titre / nom :",x.title||"");if(title===null)return;
- const description=prompt("Description :",x.description||"");if(description===null)return;
- let image=x.image_url||"",icon=x.icon||"✦";
- if(type==="models"){image=prompt("URL de l'image :",image);if(image===null)return}
- else{icon=prompt("Icône / symbole :",icon);if(icon===null)return}
- const order=prompt("Ordre :",x.sort_order??0);if(order===null)return;
- const published=confirm("OK = publié sur le site. Annuler = masqué.");
- saveItem(type,{id:x.id,title,description,image_url:image,icon,sort_order:Number(order)||0,published});
+function renderAdmin(){
+ document.getElementById("contentForm").innerHTML=textKeys.map(([k,l,t])=>`<label class="block"><span class="block text-sm font-bold mb-2">${l}</span>${t==="textarea"?`<textarea data-content="${k}" class="field min-h-28">${esc(content[k]||"")}</textarea>`:`<input data-content="${k}" class="field" value="${esc(content[k]||"")}">`}</label>`).join("")+`<div class="col-span-full"><button id="saveContent" class="bg-stone-900 text-white px-5 py-3 rounded-xl font-bold">Enregistrer tous les contenus</button><span id="contentMsg" class="ml-3 text-sm"></span></div>`;
+ document.getElementById("contactForm").innerHTML=Object.entries(contactDefaults).map(([k,l])=>`<label><span class="block text-sm font-bold mb-2">${k}</span><input data-contact="${k}" class="field" value="${esc(contact[k]||"")}"></label>`).join("")+`<div class="col-span-full"><button id="saveContact" class="bg-stone-900 text-white px-5 py-3 rounded-xl font-bold">Enregistrer</button></div>`;
+ document.getElementById("modelsAdminGrid").innerHTML=models.map((m,i)=>adminCard(m,"model",i)).join("");
+ document.getElementById("servicesAdminGrid").innerHTML=services.map((s,i)=>adminCard(s,"service",i)).join("");
+ document.getElementById("stepsAdminGrid").innerHTML=steps.map((s,i)=>adminCard(s,"step",i)).join("");
+ document.getElementById("saveContent").onclick=saveContent;document.getElementById("saveContact").onclick=saveContact;
+ document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=deleteItem);
+ document.querySelectorAll("[data-save-item]").forEach(b=>b.onclick=saveItem);
 }
-async function saveItem(type,x){
- const row={title:x.title,description:x.description,sort_order:x.sort_order,published:x.published};
- if(type==="models")row.image_url=x.image_url;
- else row.icon=x.icon;
- const r=x.id?await supabaseClient.from(type).update(row).eq("id",x.id):await supabaseClient.from(type).insert(row);
- if(r.error){alert(r.error.message);return}
- await loadAdminItems(type);await loadPublic();
+function adminCard(x,type,i){return `<article class="card p-4"><input data-f="${type}" data-id="${x.id}" data-k="title" class="field mb-2" value="${esc(x.title||"")}"><textarea data-f="${type}" data-id="${x.id}" data-k="description" class="field mb-2 min-h-24">${esc(x.description||"")}</textarea>${type==="model"?`<input data-f="${type}" data-id="${x.id}" data-k="image_url" class="field mb-2" placeholder="URL image" value="${esc(x.image_url||"")}">`:type==="service"?`<input data-f="${type}" data-id="${x.id}" data-k="icon" class="field mb-2" placeholder="Icône" value="${esc(x.icon||"✦")}">`:""}<div class="flex gap-2"><button data-save-item data-id="${x.id}" data-type="${type}" class="flex-1 bg-stone-900 text-white rounded-lg py-2 font-bold text-sm">Enregistrer</button><button data-delete data-id="${x.id}" data-type="${type}" class="px-3 border rounded-lg font-bold text-sm">Supprimer</button></div></article>`}
+async function saveContent(){
+ const rows=[...document.querySelectorAll("[data-content]")].map(e=>({key:e.dataset.content,value:e.value,published:true,updated_at:new Date().toISOString()}));
+ const r=await sb.from("site_content").upsert(rows);document.getElementById("contentMsg").textContent=r.error?r.error.message:"Enregistré.";await loadData();
 }
-async function deleteItem(type,id){
- if(!confirm("Supprimer définitivement cet élément ?"))return;
- const r=await supabaseClient.from(type).delete().eq("id",id);
- if(r.error)alert(r.error.message);else{await loadAdminItems(type);await loadPublic();}
-}
-$("addModel").onclick=()=>editItem("models");
-$("addService").onclick=()=>editItem("services");
-
-loadPublic();
+async function saveContact(){const rows=[...document.querySelectorAll("[data-contact]")].map(e=>({key:e.dataset.contact,value:e.value,published:true,updated_at:new Date().toISOString()}));await sb.from("contact_settings").upsert(rows);await adminLoad();await loadData()}
+async function saveItem(e){const b=e.currentTarget,id=b.dataset.id,type=b.dataset.type;const values={};document.querySelectorAll(`[data-f="${type}"][data-id="${id}"]`).forEach(x=>values[x.dataset.k]=x.value);const table=type==="model"?"models":type==="service"?"services":"experience_steps";await sb.from(table).update(values).eq("id",id);await adminLoad();await loadData()}
+async function deleteItem(e){if(!confirm("Supprimer cet élément ?"))return;const b=e.currentTarget,type=b.dataset.type,table=type==="model"?"models":type==="service"?"services":"experience_steps";await sb.from(table).delete().eq("id",b.dataset.id);await adminLoad();await loadData()}
+async function addRow(table,values){await sb.from(table).insert(values);await adminLoad();await loadData()}
+document.getElementById("addModel").onclick=()=>addRow("models",{title:"Nouveau modèle",description:"",image_url:"",sort_order:models.length+1,published:true});
+document.getElementById("addService").onclick=()=>addRow("services",{title:"Nouveau service",description:"",icon:"✦",sort_order:services.length+1,published:true});
+document.getElementById("addStep").onclick=()=>addRow("experience_steps",{title:"Nouvelle étape",description:"",sort_order:steps.length+1,published:true});
+document.getElementById("logoutBtn").onclick=async()=>{await sb.auth.signOut();document.getElementById("adminApp").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminModal").classList.add("hidden")};
+document.getElementById("accountForm").onsubmit=async e=>{e.preventDefault();const msg=document.getElementById("accountMessage"),data={};if(newEmail.value.trim())data.email=newEmail.value.trim();if(newPassword.value.trim())data.password=newPassword.value.trim();const {error}=await sb.auth.updateUser(data);msg.textContent=error?error.message:"Informations de connexion mises à jour.";};
+localFallback().then(loadData);
 </script>
 </body>
 </html>
