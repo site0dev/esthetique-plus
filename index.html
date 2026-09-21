@@ -1,272 +1,297 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<meta name="description" content="Esthétique Plus — Parakou, Bénin">
 <title>Esthétique Plus | Parakou</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 <style>
-:root{--accent:#b7791f;--dark:#171717}
-html{scroll-behavior:smooth}body{font-family:Inter,system-ui,-apple-system,sans-serif}
-.section{padding:5rem 1rem}.container{max-width:1180px;margin:auto}
-.grid-auto{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem}
-@media(max-width:1000px){.grid-auto{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:720px){.grid-auto{grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}}
-@media(max-width:430px){.grid-auto{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #eee;border-radius:1rem;overflow:hidden;box-shadow:0 8px 30px #00000008}
-.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-@media(max-width:700px){.admin-grid{grid-template-columns:1fr}}
-.field{width:100%;border:1px solid #ddd;border-radius:.75rem;padding:.75rem 1rem;background:#fff}
-.admin-tab.active{background:#171717;color:#fff}
+:root{
+  --ink:#171717;
+  --paper:#faf9f6;
+  --soft:#f1eee8;
+  --line:#dedbd4;
+  --accent:#b18a52;
+  --white:#fff;
+  --danger:#b42318;
+  --success:#147a4b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif}
+h1,h2,h3,.serif{font-family:"Playfair Display",Georgia,serif}
+img{max-width:100%;display:block}
+button,input,textarea,select{font:inherit}
+a{text-decoration:none;color:inherit}
+.container{width:min(1180px,92%);margin:auto}
+.section{padding:88px 0}
+.section-head{max-width:760px;margin-bottom:34px}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-weight:700;color:var(--accent)}
+.section-title{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:9px 0 12px}
+.section-intro{color:#666;line-height:1.75;margin:0}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(250,249,246,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.header-inner{min-height:72px;display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-mark{width:38px;height:38px;border:1px solid var(--ink);display:grid;place-items:center;font-family:"Playfair Display";font-size:18px}
+.brand-copy{display:grid;line-height:1.1}
+.brand-name{font-weight:700;white-space:nowrap}
+.location{font-size:.72rem;color:#777;margin-top:3px}
+.nav{display:flex;align-items:center;justify-content:center;gap:20px;flex:1}
+.nav a{font-size:.86rem;color:#555}
+.nav a:hover{color:var(--ink)}
+.header-actions{display:flex;align-items:center;gap:8px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:white;padding:12px 17px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600}
+.btn:hover{opacity:.9}
+.btn-light{background:transparent;color:var(--ink)}
+.btn-accent{background:var(--accent);border-color:var(--accent)}
+.btn-danger{background:var(--danger);border-color:var(--danger)}
+.btn-small{padding:8px 11px;font-size:.82rem}
+.menu-btn{display:none;border:1px solid var(--line);background:white;padding:9px;border-radius:4px}
+.hero{min-height:78vh;display:grid;align-items:end;position:relative;overflow:hidden;background:#222}
+.hero-media{position:absolute;inset:0}
+.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.2) 65%,rgba(0,0,0,.35))}
+.hero-content{position:relative;color:white;padding:120px 0 90px;max-width:760px}
+.hero .eyebrow{color:#e9c987}
+.hero h1{font-size:clamp(3rem,8vw,6.4rem);line-height:.96;margin:14px 0 22px}
+.hero p{font-size:clamp(1rem,2vw,1.18rem);line-height:1.75;max-width:680px;color:#eee}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.hero .btn-light{border-color:white;color:white}
+.grid-auto{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.card{background:white;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.service-card{padding:25px;min-height:210px}
+.icon-box{width:42px;height:42px;border:1px solid var(--line);display:grid;place-items:center;margin-bottom:18px;color:var(--accent)}
+.service-card h3{font-size:1.35rem;margin:0 0 9px}
+.service-card p,.step-card p,.gallery-caption p{color:#6a6a6a;line-height:1.65;margin:0}
+.gallery-card{background:white;border:1px solid var(--line);overflow:hidden;border-radius:8px}
+.gallery-image{aspect-ratio:4/3;background:#e9e6df;overflow:hidden}
+.gallery-image img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.gallery-card:hover img{transform:scale(1.04)}
+.gallery-caption{padding:16px}
+.gallery-caption h3{margin:0 0 6px;font-size:1.1rem}
+.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center}
+.about-image{aspect-ratio:4/3;overflow:hidden;background:#e9e6df;border-radius:8px}
+.about-image img{width:100%;height:100%;object-fit:cover}
+.about-copy p{color:#666;line-height:1.8}
+.steps .step-card{padding:24px;position:relative}
+.step-number{font-size:.75rem;font-weight:700;color:var(--accent);letter-spacing:.12em;margin-bottom:22px}
+.step-card h3{font-size:1.25rem;margin:0 0 8px}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.contact-card{background:var(--ink);color:white;border-radius:8px;padding:35px}
+.contact-card .eyebrow{color:#e9c987}
+.contact-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.16)}
+.contact-item:last-child{border-bottom:0}
+.contact-item small{display:block;color:#aaa;margin-bottom:5px}
+.contact-item a{word-break:break-word}
+.contact-side{border:1px solid var(--line);padding:35px;border-radius:8px;background:white}
+footer{background:#111;color:#ddd;padding:48px 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
+footer .brand-name{color:white}
+footer p{color:#aaa;line-height:1.7}
+.footer-bottom{margin-top:32px;padding-top:20px;border-top:1px solid #2b2b2b;color:#888;font-size:.82rem}
+.whatsapp-float{position:fixed;right:18px;bottom:18px;width:54px;height:54px;border-radius:50%;background:#25d366;color:white;display:grid;place-items:center;z-index:40;box-shadow:0 8px 25px rgba(0,0,0,.2)}
+.hidden{display:none!important}
+.notice{padding:12px 15px;border-radius:6px;background:#f3f3f3;border:1px solid var(--line);font-size:.9rem}
+.status{font-size:.82rem;margin-top:10px}
+.status.ok{color:var(--success)}
+.status.err{color:var(--danger)}
+/* Admin */
+.admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;display:none;overflow:auto;padding:20px}
+.admin-overlay.open{display:block}
+.admin-shell{width:min(1180px,100%);margin:auto;background:#f7f7f5;min-height:calc(100vh - 40px);border-radius:10px;overflow:hidden}
+.admin-top{background:#171717;color:white;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.admin-top h2{margin:0;font-size:1.25rem}
+.admin-body{padding:20px}
+.admin-login{max-width:480px;margin:8vh auto;padding:28px;background:white;border:1px solid var(--line);border-radius:8px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:700;margin-bottom:6px;color:#555}
+.field input,.field textarea,.field select{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:5px;background:white;outline:none}
+.field textarea{min-height:105px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.admin-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab-btn{border:1px solid #ccc;background:white;padding:9px 12px;border-radius:5px;cursor:pointer}
+.tab-btn.active{background:#171717;color:white;border-color:#171717}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.admin-card{background:white;border:1px solid var(--line);padding:18px;border-radius:7px}
+.admin-card h3{margin:0 0 15px;font-size:1.05rem}
+.admin-card .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.table-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.file-import{border:2px dashed #ccc;padding:20px;border-radius:8px;background:white}
+.progress{height:8px;background:#ddd;border-radius:99px;overflow:hidden;margin-top:12px}
+.progress i{display:block;height:100%;width:0;background:var(--accent)}
+@media(max-width:1000px){
+  .grid-auto{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .nav{gap:12px}
+  .nav a{font-size:.78rem}
+  .table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .section{padding:65px 0}
+  .header-inner{flex-wrap:wrap;padding:10px 0}
+  .menu-btn{display:block;margin-left:auto}
+  .nav{display:none;order:4;width:100%;flex-direction:column;align-items:stretch;border-top:1px solid var(--line);padding-top:10px}
+  .nav.open{display:flex}
+  .nav a{padding:8px 0}
+  .header-actions .btn{display:none}
+  .grid-auto{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .about-wrap,.contact-wrap{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .admin-grid,.table-grid{grid-template-columns:1fr}
+  .admin-overlay{padding:8px}
+  .admin-shell{min-height:calc(100vh - 16px)}
+}
+@media(max-width:430px){
+  .container{width:min(94%,1180px)}
+  .grid-auto{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .hero-content{padding:95px 0 65px}
+  .hero h1{font-size:3.15rem}
+  .hero-actions .btn{width:100%}
+  .admin-body{padding:12px}
+}
 </style>
 </head>
-<body class="bg-stone-50 text-stone-800">
 
-<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b">
-  <div class="container h-20 px-4 flex items-center justify-between gap-4">
-    <a id="adminTrigger" href="#" class="shrink-0 select-none">
-      <div class="text-xl sm:text-2xl font-black"><span id="brandName">Esthétique</span> <span class="text-stone-900" id="brandName2">Plus</span></div>
-      <div id="brandLocation" class="text-[10px] uppercase tracking-[.2em] text-stone-400">Parakou · Bénin</div>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#accueil" class="brand" id="adminTrigger" title="Administration">
+      <span class="brand-mark">EP</span>
+      <span class="brand-copy">
+        <span class="brand-name" id="brandName">Esthétique Plus</span>
+        <span class="location" id="locationText">Parakou · Bénin</span>
+      </span>
     </a>
-    <nav class="hidden lg:flex items-center gap-5 text-sm font-semibold">
-      <a href="#accueil">Accueil</a><a href="#services">Services</a><a href="#realisations">Réalisations</a><a href="#apropos">À propos</a><a href="#contact">Contact</a>
+
+    <nav class="nav" id="mainNav">
+      <a href="#accueil" data-text="nav_home">Accueil</a>
+      <a href="#services" data-text="nav_services">Services</a>
+      <a href="#realisations" data-text="nav_gallery">Réalisations</a>
+      <a href="#apropos" data-text="nav_about">À propos</a>
+      <a href="#etapes" data-text="nav_steps">Méthode</a>
+      <a href="#contact" data-text="nav_contact">Contact</a>
     </nav>
-    <a id="headerPhone" href="tel:+2290194870650" class="bg-stone-900 text-white px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap"><i class="fa-solid fa-phone mr-2"></i><span>Appeler</span></a>
+
+    <div class="header-actions">
+      <a class="btn btn-small" id="headerCall" href="tel:+2290194870650"><i class="fa-solid fa-phone"></i><span data-text="header_call">Appeler</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
   </div>
 </header>
 
 <main>
-<section id="accueil" class="relative min-h-[620px] flex items-center text-white overflow-hidden">
-  <img id="heroImage" src="hero.jpg" class="absolute inset-0 w-full h-full object-cover" alt="">
-  <div class="absolute inset-0 bg-black/55"></div>
-  <div class="relative container px-4 py-24">
-    <div class="max-w-3xl">
-      <p id="heroEyebrow" class="uppercase tracking-[.25em] text-amber-300 text-sm font-bold mb-5">Esthétique Plus</p>
-      <h1 id="heroTitle" class="text-4xl sm:text-6xl font-black leading-tight mb-6">Espaces d'exception</h1>
-      <p id="heroText" class="text-lg sm:text-xl text-white/90 max-w-2xl mb-8">Donnez une seconde vie à vos bâtiments, maisons et bureaux.</p>
-      <div class="flex flex-wrap gap-3">
-        <a id="heroButton1" href="#realisations" class="bg-amber-600 hover:bg-amber-700 px-6 py-3 rounded-xl font-bold">Découvrir nos réalisations</a>
-        <a id="heroButton2" href="#contact" class="border border-white/60 hover:bg-white hover:text-stone-900 px-6 py-3 rounded-xl font-bold">Nous contacter</a>
-      </div>
+<section class="hero" id="accueil">
+  <div class="hero-media"><img id="heroImage" src="hero.jpg" alt="Esthétique Plus"></div>
+  <div class="container hero-content">
+    <div class="eyebrow" id="heroEyebrow">Esthétique Plus</div>
+    <h1 id="heroTitle">Espaces d'exception</h1>
+    <p id="heroText">Donnez une seconde vie à vos bâtiments, maisons et bureaux.</p>
+    <div class="hero-actions">
+      <a class="btn btn-accent" href="#realisations" id="heroBtn1">Découvrir nos réalisations</a>
+      <a class="btn btn-light" href="#contact" id="heroBtn2">Nous contacter</a>
     </div>
   </div>
 </section>
 
-<section id="services" class="section bg-white">
- <div class="container">
-  <div class="max-w-2xl mb-10"><p id="servicesEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Notre savoir-faire</p><h2 id="servicesTitle" class="text-3xl sm:text-4xl font-black mt-2">Nos services</h2><p id="servicesIntro" class="text-stone-500 mt-3">Des solutions adaptées à chaque espace et à chaque projet.</p></div>
-  <div id="servicesGrid" class="grid-auto"></div>
- </div>
-</section>
-
-<section id="realisations" class="section bg-stone-50">
- <div class="container">
-  <div class="max-w-2xl mb-10"><p id="galleryEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Portfolio</p><h2 id="galleryTitle" class="text-3xl sm:text-4xl font-black mt-2">Nos réalisations</h2><p id="galleryIntro" class="text-stone-500 mt-3">Découvrez nos modèles et nos réalisations.</p></div>
-  <div id="modelsGrid" class="grid-auto"></div>
- </div>
-</section>
-
-<section id="apropos" class="section bg-white">
- <div class="container">
-  <div class="grid lg:grid-cols-2 gap-12 items-center">
-   <div><p id="aboutEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Notre identité</p><h2 id="aboutTitle" class="text-3xl sm:text-4xl font-black mt-2">Un atelier à votre écoute</h2><p id="aboutText" class="text-stone-600 mt-5 leading-8">Nous concevons et transformons les espaces avec une attention particulière portée aux détails, aux finitions et aux besoins de chaque client.</p></div>
-   <div class="rounded-3xl overflow-hidden aspect-[4/3] bg-stone-200"><img id="aboutImage" src="about.jpg" class="w-full h-full object-cover" alt=""></div>
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" id="servicesEyebrow">Notre savoir-faire</div>
+      <h2 class="section-title" id="servicesTitle">Nos services</h2>
+      <p class="section-intro" id="servicesIntro">Des solutions adaptées à chaque espace et à chaque projet.</p>
+    </div>
+    <div class="grid-auto" id="servicesGrid"></div>
   </div>
- </div>
 </section>
 
-<section id="etapes" class="section bg-stone-900 text-white">
- <div class="container">
-  <div class="max-w-2xl mb-10"><p id="stepsEyebrow" class="text-amber-300 font-bold uppercase tracking-widest text-xs">Notre méthode</p><h2 id="stepsTitle" class="text-3xl sm:text-4xl font-black mt-2">Comment ça marche</h2><p id="stepsIntro" class="text-white/60 mt-3">Un accompagnement simple, clair et personnalisé.</p></div>
-  <div id="stepsGrid" class="grid-auto"></div>
- </div>
-</section>
-
-<section id="contact" class="section bg-white">
- <div class="container">
-  <div class="grid lg:grid-cols-2 gap-10">
-   <div><p id="contactEyebrow" class="text-amber-700 font-bold uppercase tracking-widest text-xs">Parlons de votre projet</p><h2 id="contactTitle" class="text-3xl sm:text-4xl font-black mt-2">Contactez-nous</h2><p id="contactText" class="text-stone-500 mt-4">Échangez directement avec notre équipe pour présenter votre projet.</p></div>
-   <div id="contactCards" class="grid sm:grid-cols-2 gap-4"></div>
+<section class="section" id="realisations">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" id="galleryEyebrow">Portfolio</div>
+      <h2 class="section-title" id="galleryTitle">Nos réalisations</h2>
+      <p class="section-intro" id="galleryIntro">Découvrez nos modèles et nos réalisations.</p>
+    </div>
+    <div class="grid-auto" id="galleryGrid"></div>
   </div>
- </div>
+</section>
+
+<section class="section" id="apropos">
+  <div class="container about-wrap">
+    <div class="about-image"><img id="aboutImage" src="about.jpg" alt="À propos"></div>
+    <div class="about-copy">
+      <div class="eyebrow" id="aboutEyebrow">Notre identité</div>
+      <h2 class="section-title" id="aboutTitle">Un atelier à votre écoute</h2>
+      <p id="aboutText">Nous concevons et transformons les espaces avec une attention particulière portée aux détails, aux finitions et aux besoins de chaque client.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section steps" id="etapes">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" id="stepsEyebrow">Notre méthode</div>
+      <h2 class="section-title" id="stepsTitle">Comment ça marche</h2>
+      <p class="section-intro" id="stepsIntro">Un accompagnement simple, clair et personnalisé.</p>
+    </div>
+    <div class="grid-auto" id="stepsGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" id="contactEyebrow">Parlons de votre projet</div>
+      <h2 class="section-title" id="contactTitle">Contactez-nous</h2>
+      <p class="section-intro" id="contactText">Échangez directement avec notre équipe pour présenter votre projet.</p>
+    </div>
+    <div class="contact-wrap">
+      <div class="contact-card">
+        <div class="contact-item"><small>Téléphone</small><a id="contactPhone" href="tel:+2290194870650">+229 01 94 87 06 50</a></div>
+        <div class="contact-item"><small>WhatsApp</small><a id="contactWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650">+229 94 87 06 50</a></div>
+        <div class="contact-item"><small>Email</small><a id="contactEmail" href="mailto:">—</a></div>
+        <div class="contact-item"><small>Adresse</small><span id="contactAddress">Parakou, Bénin</span></div>
+        <div class="contact-item"><small>Horaires</small><span id="contactHours">Lundi — Samedi</span></div>
+      </div>
+      <div class="contact-side">
+        <h3 class="serif" style="font-size:1.8rem;margin-top:0">Un projet en tête ?</h3>
+        <p style="color:#666;line-height:1.8">Utilisez WhatsApp pour nous envoyer rapidement votre besoin, vos photos et les détails de votre projet.</p>
+        <a class="btn btn-accent" id="contactWhatsappBtn" target="_blank" rel="noopener" href="https://wa.me/22994870650"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+      </div>
+    </div>
+  </div>
 </section>
 </main>
 
-<footer class="bg-stone-950 text-white py-12">
- <div class="container px-4 grid md:grid-cols-3 gap-8">
-  <div><h3 id="footerName" class="font-black text-xl">Esthétique Plus</h3><p id="footerText" class="text-white/50 mt-2">Atelier d'aménagement d'espaces.</p></div>
-  <div><h4 id="footerContactTitle" class="font-bold">Contact</h4><p id="footerAddress" class="text-white/60 mt-2"></p><p id="footerPhone" class="text-white/60 mt-1"></p><p id="footerWhatsapp" class="text-white/60 mt-1"></p></div>
-  <div><p id="footerCopyright" class="text-white/40 text-sm md:text-right">© 2026 Esthétique Plus. Tous droits réservés.</p></div>
- </div>
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="brand-mark" style="border-color:#777">EP</span><span class="brand-copy"><span class="brand-name" id="footerBrand">Esthétique Plus</span><span class="location" id="footerLocation">Parakou · Bénin</span></span></div>
+        <p id="footerText">Atelier d'aménagement d'espaces.</p>
+      </div>
+      <div>
+        <strong id="footerContactTitle">Contact</strong>
+        <p><span id="footerPhone">+229 01 94 87 06 50</span><br><span id="footerAddress">Parakou, Bénin</span></p>
+      </div>
+      <div>
+        <strong>WhatsApp</strong>
+        <p><a id="footerWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650">+229 94 87 06 50</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom" id="footerCopyright">© 2026 Esthétique Plus. Tous droits réservés.</div>
+  </div>
 </footer>
 
-<a id="floatingWhatsapp" href="https://wa.me/22994870650" target="_blank" class="fixed right-5 bottom-5 z-30 w-14 h-14 rounded-full bg-green-500 text-white flex items-center justify-center shadow-xl"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
-
-<div id="adminModal" class="hidden fixed inset-0 z-[100] bg-black/70 p-3 sm:p-6 overflow-y-auto">
- <div class="max-w-6xl mx-auto bg-stone-50 rounded-3xl min-h-full sm:min-h-0 shadow-2xl">
-  <div class="sticky top-0 bg-white rounded-t-3xl border-b px-5 py-4 flex items-center justify-between z-10">
-   <div><h2 class="text-xl font-black">Administration</h2><p id="adminStatus" class="text-xs text-stone-500">Connexion Supabase requise</p></div>
-   <button id="closeAdmin" class="w-10 h-10 rounded-full bg-stone-100 text-xl">&times;</button>
-  </div>
-  <div id="loginBox" class="max-w-md mx-auto p-6 sm:p-10">
-   <h3 class="text-2xl font-black mb-2">Connexion administrateur</h3>
-   <p class="text-stone-500 text-sm mb-6">Authentification sécurisée par Supabase Auth.</p>
-   <form id="loginForm" class="space-y-4">
-    <input id="loginEmail" type="email" class="field" placeholder="Email administrateur" required>
-    <input id="loginPassword" type="password" class="field" placeholder="Mot de passe" required>
-    <button class="w-full bg-stone-900 text-white rounded-xl py-3 font-bold">Se connecter</button>
-    <p id="loginMessage" class="text-sm"></p>
-   </form>
-  </div>
-  <div id="adminApp" class="hidden">
-   <div class="p-4 flex flex-wrap gap-2 border-b bg-white">
-    <button class="admin-tab active px-4 py-2 rounded-xl text-sm font-bold" data-tab="content">Contenu</button>
-    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="models">Modèles</button>
-    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="services">Services</button>
-    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="steps">Étapes</button>
-    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="contact">Contact</button>
-    <button class="admin-tab px-4 py-2 rounded-xl text-sm font-bold" data-tab="account">Connexion</button>
-    <button id="logoutBtn" class="ml-auto px-4 py-2 rounded-xl text-sm font-bold border">Déconnexion</button>
-   </div>
-   <div class="p-5 sm:p-8">
-    <section data-panel="content">
-     <h3 class="text-2xl font-black mb-6">Tous les textes et images</h3>
-     <form id="contentForm" class="admin-grid"></form>
-    </section>
-    <section data-panel="models" class="hidden">
-     <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-black">Modèles / galerie</h3><button id="addModel" class="bg-stone-900 text-white px-4 py-2 rounded-xl font-bold">+ Ajouter</button></div>
-     <div id="modelsAdminGrid" class="grid-auto"></div>
-    </section>
-    <section data-panel="services" class="hidden">
-     <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-black">Services</h3><button id="addService" class="bg-stone-900 text-white px-4 py-2 rounded-xl font-bold">+ Ajouter</button></div>
-     <div id="servicesAdminGrid" class="grid-auto"></div>
-    </section>
-    <section data-panel="steps" class="hidden">
-     <div class="flex justify-between items-center mb-5"><h3 class="text-2xl font-black">Étapes</h3><button id="addStep" class="bg-stone-900 text-white px-4 py-2 rounded-xl font-bold">+ Ajouter</button></div>
-     <div id="stepsAdminGrid" class="grid-auto"></div>
-    </section>
-    <section data-panel="contact" class="hidden">
-     <h3 class="text-2xl font-black mb-5">Informations de contact</h3><form id="contactForm" class="admin-grid"></form>
-    </section>
-    <section data-panel="account" class="hidden">
-     <h3 class="text-2xl font-black mb-2">Informations de connexion</h3>
-     <p class="text-stone-500 text-sm mb-6">Modifiez l'adresse email ou le mot de passe du compte actuellement connecté.</p>
-     <form id="accountForm" class="max-w-xl space-y-4">
-      <input id="newEmail" type="email" class="field" placeholder="Nouvel email">
-      <input id="newPassword" type="password" minlength="8" class="field" placeholder="Nouveau mot de passe (8 caractères minimum)">
-      <button class="bg-stone-900 text-white px-5 py-3 rounded-xl font-bold">Enregistrer</button><p id="accountMessage" class="text-sm"></p>
-     </form>
-    </section>
-   </div>
-  </div>
- </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL="COLLE_ICI_URL_SUPABASE";
-const SUPABASE_ANON_KEY="COLLE_ICI_CLE_ANON_SUPABASE";
-const supabaseReady=SUPABASE_URL.startsWith("https://")&&!SUPABASE_URL.includes("COLLE_ICI")&&!SUPABASE_ANON_KEY.includes("COLLE_ICI");
-const sb=supabaseReady?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
-
-const textKeys=[
-["brand_name","Nom du site","text"],["location","Localisation","text"],["hero_eyebrow","Hero — petit titre","text"],["hero_title","Hero — grand titre","text"],["hero_text","Hero — texte","textarea"],["hero_button_1","Hero — bouton 1","text"],["hero_button_2","Hero — bouton 2","text"],["hero_image_url","Hero — URL image","text"],
-["services_eyebrow","Services — petit titre","text"],["services_title","Services — titre","text"],["services_intro","Services — introduction","textarea"],["gallery_eyebrow","Galerie — petit titre","text"],["gallery_title","Galerie — titre","text"],["gallery_intro","Galerie — introduction","textarea"],
-["about_eyebrow","À propos — petit titre","text"],["about_title","À propos — titre","text"],["about_text","À propos — texte","textarea"],["about_image_url","À propos — URL image","text"],
-["steps_eyebrow","Étapes — petit titre","text"],["steps_title","Étapes — titre","text"],["steps_intro","Étapes — introduction","textarea"],["contact_eyebrow","Contact — petit titre","text"],["contact_title","Contact — titre","text"],["contact_text","Contact — texte","textarea"],
-["footer_text","Footer — texte","textarea"],["footer_contact_title","Footer — titre contact","text"],["footer_copyright","Footer — copyright","text"]
-];
-const defaults={
-brand_name:"Esthétique Plus",location:"Parakou · Bénin",hero_eyebrow:"Esthétique Plus",hero_title:"Espaces d'exception",hero_text:"Donnez une seconde vie à vos bâtiments, maisons et bureaux.",hero_button_1:"Découvrir nos réalisations",hero_button_2:"Nous contacter",hero_image_url:"hero.jpg",
-services_eyebrow:"Notre savoir-faire",services_title:"Nos services",services_intro:"Des solutions adaptées à chaque espace et à chaque projet.",gallery_eyebrow:"Portfolio",gallery_title:"Nos réalisations",gallery_intro:"Découvrez nos modèles et nos réalisations.",about_eyebrow:"Notre identité",about_title:"Un atelier à votre écoute",about_text:"Nous concevons et transformons les espaces avec une attention particulière portée aux détails, aux finitions et aux besoins de chaque client.",about_image_url:"about.jpg",steps_eyebrow:"Notre méthode",steps_title:"Comment ça marche",steps_intro:"Un accompagnement simple, clair et personnalisé.",contact_eyebrow:"Parlons de votre projet",contact_title:"Contactez-nous",contact_text:"Échangez directement avec notre équipe pour présenter votre projet.",footer_text:"Atelier d'aménagement d'espaces.",footer_contact_title:"Contact",footer_copyright:"© 2026 Esthétique Plus. Tous droits réservés."
-};
-const contactDefaults={phone:"+229 01 94 87 06 50",whatsapp:"22994870650",email:"",address:"Parakou, Bénin",contact_hours:"Lundi — Samedi"};
-let content={...defaults}, contact={...contactDefaults}, models=[], services=[], steps=[];
-
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-async function localFallback(){
-  const hero=document.getElementById("heroImage"), about=document.getElementById("aboutImage");
-  for(const el of [hero,about]){el.onerror=()=>{}}
-  document.getElementById("heroImage").src="hero.jpg";
-  document.getElementById("aboutImage").src="about.jpg";
-  if(!supabaseReady) document.getElementById("adminStatus").textContent="Mode temporaire — configurez Supabase pour activer l'administration.";
-}
-function render(){
-  document.getElementById("brandName").textContent=(content.brand_name||"Esthétique Plus").split(" ")[0]||"Esthétique";
-  document.getElementById("brandName2").textContent=(content.brand_name||"Esthétique Plus").split(" ").slice(1).join(" ");
-  document.getElementById("brandLocation").textContent=content.location||"";
-  const map={heroEyebrow:"hero_eyebrow",heroTitle:"hero_title",heroText:"hero_text",heroButton1:"hero_button_1",heroButton2:"hero_button_2",servicesEyebrow:"services_eyebrow",servicesTitle:"services_title",servicesIntro:"services_intro",galleryEyebrow:"gallery_eyebrow",galleryTitle:"gallery_title",galleryIntro:"gallery_intro",aboutEyebrow:"about_eyebrow",aboutTitle:"about_title",aboutText:"about_text",stepsEyebrow:"steps_eyebrow",stepsTitle:"steps_title",stepsIntro:"steps_intro",contactEyebrow:"contact_eyebrow",contactTitle:"contact_title",contactText:"contact_text",footerName:"brand_name",footerText:"footer_text",footerContactTitle:"footer_contact_title",footerCopyright:"footer_copyright"};
-  Object.entries(map).forEach(([id,k])=>{const e=document.getElementById(id);if(e)e.textContent=content[k]||""});
-  document.getElementById("heroImage").src=content.hero_image_url||"hero.jpg";
-  document.getElementById("aboutImage").src=content.about_image_url||"about.jpg";
-  const clean=contact.phone.replace(/\s/g,"");document.getElementById("headerPhone").href="tel:"+clean;document.getElementById("footerPhone").textContent=contact.phone;document.getElementById("footerAddress").textContent=contact.address;document.getElementById("footerWhatsapp").textContent=contact.whatsapp?"WhatsApp : +"+contact.whatsapp:"";document.getElementById("floatingWhatsapp").href=contact.whatsapp?"https://wa.me/"+contact.whatsapp:"#";
-  document.getElementById("servicesGrid").innerHTML=services.map(s=>`<article class="card p-6"><div class="text-2xl text-amber-600">${esc(s.icon||"✦")}</div><h3 class="font-black text-lg mt-3">${esc(s.title)}</h3><p class="text-stone-500 text-sm mt-2 leading-6">${esc(s.description)}</p></article>`).join("")||`<div class="col-span-full text-stone-400">Ajoutez vos services dans l'administration.</div>`;
-  document.getElementById("modelsGrid").innerHTML=models.map(m=>`<article class="card"><img src="${esc(m.image_url)}" class="w-full aspect-square object-cover" alt="${esc(m.title)}"><div class="p-5"><h3 class="font-black">${esc(m.title)}</h3><p class="text-sm text-stone-500 mt-2">${esc(m.description)}</p><a href="https://wa.me/${contact.whatsapp}?text=${encodeURIComponent("Bonjour, je souhaite des renseignements sur "+m.title)}" target="_blank" class="inline-block mt-4 bg-stone-900 text-white px-4 py-2 rounded-lg text-sm font-bold">Commander</a></div></article>`).join("")||`<div class="col-span-full text-stone-400">Ajoutez vos réalisations dans l'administration.</div>`;
-  document.getElementById("stepsGrid").innerHTML=steps.map((s,i)=>`<article class="bg-white/5 border border-white/10 rounded-2xl p-6"><div class="text-amber-300 text-sm font-black">0${i+1}</div><h3 class="font-black text-lg mt-3">${esc(s.title)}</h3><p class="text-white/60 text-sm mt-2 leading-6">${esc(s.description)}</p></article>`).join("");
-  document.getElementById("contactCards").innerHTML=[["fa-phone","Téléphone",contact.phone,"tel:"+contact.phone.replace(/\s/g,"")],["fa-whatsapp","WhatsApp","+"+contact.whatsapp,"https://wa.me/"+contact.whatsapp],["fa-location-dot","Adresse",contact.address,"#"],["fa-clock","Horaires",contact.contact_hours,"#"]].map(x=>`<a href="${esc(x[3])}" class="card p-5"><i class="fa-solid ${x[0]} text-amber-600"></i><div class="font-bold mt-3">${x[1]}</div><div class="text-sm text-stone-500 mt-1">${esc(x[2])}</div></a>`).join("");
-}
-async function loadData(){
-  if(!sb){models=[];services=[];steps=[];render();return}
-  const [c,m,s,t,ct]=await Promise.all([
-    sb.from("site_content").select("key,value").eq("published",true),
-    sb.from("models").select("*").eq("published",true).order("sort_order"),
-    sb.from("services").select("*").eq("published",true).order("sort_order"),
-    sb.from("experience_steps").select("*").eq("published",true).order("sort_order"),
-    sb.from("contact_settings").select("key,value").eq("published",true)
-  ]);
-  if(!c.error)c.data.forEach(x=>content[x.key]=x.value);
-  if(!m.error)models=m.data||[]; if(!s.error)services=s.data||[]; if(!t.error)steps=t.data||[]; if(!ct.error)ct.data.forEach(x=>contact[x.key]=x.value);
-  render();
-}
-async function isAdmin(){
-  if(!sb)return false;
-  const {data:{user}}=await sb.auth.getUser(); if(!user)return false;
-  const {data}=await sb.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle(); return !!data;
-}
-function openAdmin(){document.getElementById("adminModal").classList.remove("hidden")}
-document.getElementById("adminTrigger").onclick=e=>{e.preventDefault();openAdmin()}
-document.getElementById("closeAdmin").onclick=()=>document.getElementById("adminModal").classList.add("hidden");
-document.querySelectorAll(".admin-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("[data-panel]").forEach(p=>p.classList.toggle("hidden",p.dataset.panel!==b.dataset.tab))});
-document.getElementById("loginForm").onsubmit=async e=>{
- e.preventDefault();const msg=document.getElementById("loginMessage");
- if(!sb){msg.textContent="Configurez d'abord l'URL et la clé anon Supabase dans index.html.";msg.className="text-sm text-red-600";return}
- const {error}=await sb.auth.signInWithPassword({email:loginEmail.value,password:loginPassword.value});
- if(error){msg.textContent=error.message;return}
- if(!(await isAdmin())){await sb.auth.signOut();msg.textContent="Ce compte n'est pas autorisé comme administrateur.";return}
- document.getElementById("loginBox").classList.add("hidden");document.getElementById("adminApp").classList.remove("hidden");document.getElementById("adminStatus").textContent="Administrateur connecté";await adminLoad();
-};
-async function adminLoad(){
- const c=await sb.from("site_content").select("key,value");if(!c.error)c.data.forEach(x=>content[x.key]=x.value);
- const ct=await sb.from("contact_settings").select("key,value");if(!ct.error)ct.data.forEach(x=>contact[x.key]=x.value);
- const [m,s,t]=await Promise.all([sb.from("models").select("*").order("sort_order"),sb.from("services").select("*").order("sort_order"),sb.from("experience_steps").select("*").order("sort_order")]);
- models=m.data||[];services=s.data||[];steps=t.data||[];renderAdmin();
-}
-function renderAdmin(){
- document.getElementById("contentForm").innerHTML=textKeys.map(([k,l,t])=>`<label class="block"><span class="block text-sm font-bold mb-2">${l}</span>${t==="textarea"?`<textarea data-content="${k}" class="field min-h-28">${esc(content[k]||"")}</textarea>`:`<input data-content="${k}" class="field" value="${esc(content[k]||"")}">`}</label>`).join("")+`<div class="col-span-full"><button id="saveContent" class="bg-stone-900 text-white px-5 py-3 rounded-xl font-bold">Enregistrer tous les contenus</button><span id="contentMsg" class="ml-3 text-sm"></span></div>`;
- document.getElementById("contactForm").innerHTML=Object.entries(contactDefaults).map(([k,l])=>`<label><span class="block text-sm font-bold mb-2">${k}</span><input data-contact="${k}" class="field" value="${esc(contact[k]||"")}"></label>`).join("")+`<div class="col-span-full"><button id="saveContact" class="bg-stone-900 text-white px-5 py-3 rounded-xl font-bold">Enregistrer</button></div>`;
- document.getElementById("modelsAdminGrid").innerHTML=models.map((m,i)=>adminCard(m,"model",i)).join("");
- document.getElementById("servicesAdminGrid").innerHTML=services.map((s,i)=>adminCard(s,"service",i)).join("");
- document.getElementById("stepsAdminGrid").innerHTML=steps.map((s,i)=>adminCard(s,"step",i)).join("");
- document.getElementById("saveContent").onclick=saveContent;document.getElementById("saveContact").onclick=saveContact;
- document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=deleteItem);
- document.querySelectorAll("[data-save-item]").forEach(b=>b.onclick=saveItem);
-}
-function adminCard(x,type,i){return `<article class="card p-4"><input data-f="${type}" data-id="${x.id}" data-k="title" class="field mb-2" value="${esc(x.title||"")}"><textarea data-f="${type}" data-id="${x.id}" data-k="description" class="field mb-2 min-h-24">${esc(x.description||"")}</textarea>${type==="model"?`<input data-f="${type}" data-id="${x.id}" data-k="image_url" class="field mb-2" placeholder="URL image" value="${esc(x.image_url||"")}">`:type==="service"?`<input data-f="${type}" data-id="${x.id}" data-k="icon" class="field mb-2" placeholder="Icône" value="${esc(x.icon||"✦")}">`:""}<div class="flex gap-2"><button data-save-item data-id="${x.id}" data-type="${type}" class="flex-1 bg-stone-900 text-white rounded-lg py-2 font-bold text-sm">Enregistrer</button><button data-delete data-id="${x.id}" data-type="${type}" class="px-3 border rounded-lg font-bold text-sm">Supprimer</button></div></article>`}
-async function saveContent(){
- const rows=[...document.querySelectorAll("[data-content]")].map(e=>({key:e.dataset.content,value:e.value,published:true,updated_at:new Date().toISOString()}));
- const r=await sb.from("site_content").upsert(rows);document.getElementById("contentMsg").textContent=r.error?r.error.message:"Enregistré.";await loadData();
-}
-async function saveContact(){const rows=[...document.querySelectorAll("[data-contact]")].map(e=>({key:e.dataset.contact,value:e.value,published:true,updated_at:new Date().toISOString()}));await sb.from("contact_settings").upsert(rows);await adminLoad();await loadData()}
-async function saveItem(e){const b=e.currentTarget,id=b.dataset.id,type=b.dataset.type;const values={};document.querySelectorAll(`[data-f="${type}"][data-id="${id}"]`).forEach(x=>values[x.dataset.k]=x.value);const table=type==="model"?"models":type==="service"?"services":"experience_steps";await sb.from(table).update(values).eq("id",id);await adminLoad();await loadData()}
-async function deleteItem(e){if(!confirm("Supprimer cet élément ?"))return;const b=e.currentTarget,type=b.dataset.type,table=type==="model"?"models":type==="service"?"services":"experience_steps";await sb.from(table).delete().eq("id",b.dataset.id);await adminLoad();await loadData()}
-async function addRow(table,values){await sb.from(table).insert(values);await adminLoad();await loadData()}
-document.getElementById("addModel").onclick=()=>addRow("models",{title:"Nouveau modèle",description:"",image_url:"",sort_order:models.length+1,published:true});
-document.getElementById("addService").onclick=()=>addRow("services",{title:"Nouveau service",description:"",icon:"✦",sort_order:services.length+1,published:true});
-document.getElementById("addStep").onclick=()=>addRow("experience_steps",{title:"Nouvelle étape",description:"",sort_order:steps.length+1,published:true});
-document.getElementById("logoutBtn").onclick=async()=>{await sb.auth.signOut();document.getElementById("adminApp").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminModal").classList.add("hidden")};
-document.getElementById("accountForm").onsubmit=async e=>{e.preventDefault();const msg=document.getElementById("accountMessage"),data={};if(newEmail.value.trim())data.email=newEmail.value.trim();if(newPassword.value.trim())data.password=newPassword.value.trim();const {error}=await sb.auth.updateUser(data);msg.textContent=error?error.message:"Informations de connexion mises à jour.";};
-localFallback().then(loadData);
-</script>
-</body>
-</html>
+<a class="whatsapp-float" id="floatWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650" aria-label="WhatsApp">
