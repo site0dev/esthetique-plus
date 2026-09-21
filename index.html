@@ -344,8 +344,7 @@ footer p{color:#aaa;line-height:1.7}
 
       <div id="loginView" class="admin-login">
         <h2 class="serif" style="font-size:2rem;margin-top:0">Connexion administrateur</h2>
-        <p style="color:#666">Connectez-vous avec le compte créé dans Supabase Auth.</p>
-        <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username"></div>
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" value="olougbadeabass@gmail.com"></div>
         <div class="field"><label>Mot de passe</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
         <button class="btn" id="loginBtn">Se connecter</button>
         <div id="loginStatus" class="status"></div>
@@ -422,7 +421,6 @@ footer p{color:#aaa;line-height:1.7}
         <div class="admin-section" id="accountTab">
           <div class="admin-card">
             <h3>Compte Supabase Auth</h3>
-            <p style="color:#666">Le compte doit exister dans Supabase Authentication et son UUID doit être présent dans <b>admin_users</b>.</p>
             <div class="field"><label>Nouvel email</label><input id="accountEmail" type="email"></div>
             <button class="btn btn-small" id="saveEmailBtn">Changer l'email</button>
           </div>
@@ -665,24 +663,89 @@ function showAdmin(){
   buildContentForm(); buildContactForm(); loadAdminData();
 }
 async function verifyAdmin(){
-  if(!state.session)return false;
-  const {data,error}=await sb.from("admin_users").select("user_id").eq("user_id",state.session.user.id).maybeSingle();
-  if(error || !data){
+  try{
+    const {data:{user},error:userError}=await sb.auth.getUser();
+    if(userError || !user){
+      throw new Error(userError?.message || "Session Supabase introuvable.");
+    }
+    state.session=(await sb.auth.getSession()).data.session;
+
+    /* Vérification principale par la fonction SQL sécurisée. */
+    const {data:isAdmin,error:rpcError}=await sb.rpc("is_admin");
+    if(!rpcError && isAdmin===true){
+      return true;
+    }
+
+    /* Secours : lecture de sa propre ligne admin_users. */
+    const {data,rowError}=await sb
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+    if(!rowError && data){
+      return true;
+    }
+
     await sb.auth.signOut();
+    state.session=null;
     showLogin();
-    setStatus("loginStatus","Ce compte n'est pas autorisé comme administrateur.",false);
+
+    if(rowError){
+      console.error("Vérification admin:",rowError);
+      setStatus("loginStatus",`Connexion impossible : ${rowError.message}`,false);
+    }else if(rpcError){
+      console.error("Fonction is_admin:",rpcError);
+      setStatus("loginStatus","Compte connecté mais non autorisé comme administrateur. Vérifie que son UUID est présent dans admin_users.",false);
+    }else{
+      setStatus("loginStatus","Compte connecté mais non autorisé comme administrateur. Vérifie son UUID dans admin_users.",false);
+    }
+    return false;
+  }catch(error){
+    console.error("Erreur de connexion administrateur:",error);
+    await sb.auth.signOut().catch(()=>{});
+    state.session=null;
+    showLogin();
+    setStatus("loginStatus",`Erreur de connexion : ${error.message}`,false);
     return false;
   }
-  return true;
 }
 document.getElementById("loginBtn").addEventListener("click",async()=>{
-  if(!sb)return;
-  setStatus("loginStatus","Connexion...",true);
-  const email=document.getElementById("loginEmail").value.trim(), password=document.getElementById("loginPassword").value;
-  const {data,error}=await sb.auth.signInWithPassword({email,password});
-  if(error){setStatus("loginStatus",error.message,false);return;}
-  state.session=data.session;
-  if(await verifyAdmin()){setStatus("loginStatus","Connecté.",true);showAdmin();}
+  if(!sb){
+    setStatus("loginStatus","Supabase n'est pas configuré.",false);
+    return;
+  }
+  const button=document.getElementById("loginBtn");
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+
+  if(!email || !password){
+    setStatus("loginStatus","Veuillez saisir l'email et le mot de passe.",false);
+    return;
+  }
+
+  button.disabled=true;
+  button.textContent="Connexion...";
+  setStatus("loginStatus","",true);
+
+  try{
+    await sb.auth.signOut().catch(()=>{});
+    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    if(error){
+      setStatus("loginStatus",`Échec de connexion : ${error.message}`,false);
+      return;
+    }
+    state.session=data.session;
+    if(await verifyAdmin()){
+      showAdmin();
+    }
+  }catch(error){
+    console.error(error);
+    setStatus("loginStatus",`Erreur de connexion : ${error.message}`,false);
+  }finally{
+    button.disabled=false;
+    button.textContent="Se connecter";
+  }
 });
 document.getElementById("logoutBtn").addEventListener("click",async()=>{await sb.auth.signOut();state.session=null;showLogin();});
 
