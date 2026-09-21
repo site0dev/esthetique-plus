@@ -283,15 +283,15 @@ footer p{color:#aaa;line-height:1.7}
     </div>
     <div class="contact-wrap">
       <div class="contact-card">
-        <div class="contact-item"><small>Téléphone</small><a id="contactPhone" href="tel:+2290194870650">+229 01 94 87 06 50</a></div>
-        <div class="contact-item"><small>WhatsApp</small><a id="contactWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650">+229 94 87 06 50</a></div>
-        <div class="contact-item"><small>Email</small><a id="contactEmail" href="mailto:">—</a></div>
-        <div class="contact-item"><small>Adresse</small><span id="contactAddress">Parakou, Bénin</span></div>
-        <div class="contact-item"><small>Horaires</small><span id="contactHours">Lundi — Samedi</span></div>
+        <div class="contact-item"><small id="contactPhoneLabel">Téléphone</small><a id="contactPhone" href="tel:+2290194870650">+229 01 94 87 06 50</a></div>
+        <div class="contact-item"><small id="contactWhatsappLabel">WhatsApp</small><a id="contactWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650">+229 94 87 06 50</a></div>
+        <div class="contact-item"><small id="contactEmailLabel">Email</small><a id="contactEmail" href="mailto:">—</a></div>
+        <div class="contact-item"><small id="contactAddressLabel">Adresse</small><span id="contactAddress">Parakou, Bénin</span></div>
+        <div class="contact-item"><small id="contactHoursLabel">Horaires</small><span id="contactHours">Lundi — Samedi</span></div>
       </div>
       <div class="contact-side">
-        <h3 class="serif" style="font-size:1.8rem;margin-top:0">Un projet en tête ?</h3>
-        <p style="color:#666;line-height:1.8">Utilisez WhatsApp pour nous envoyer rapidement votre besoin, vos photos et les détails de votre projet.</p>
+        <h3 class="serif" style="font-size:1.8rem;margin-top:0" id="contactSideTitle">Un projet en tête ?</h3>
+        <p style="color:#666;line-height:1.8" id="contactSideText">Utilisez WhatsApp pour nous envoyer rapidement votre besoin, vos photos et les détails de votre projet.</p>
         <a class="btn btn-accent" id="contactWhatsappBtn" target="_blank" rel="noopener" href="https://wa.me/22994870650"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
       </div>
     </div>
@@ -311,7 +311,7 @@ footer p{color:#aaa;line-height:1.7}
         <p><span id="footerPhone">+229 01 94 87 06 50</span><br><span id="footerAddress">Parakou, Bénin</span></p>
       </div>
       <div>
-        <strong>WhatsApp</strong>
+        <strong id="footerWhatsappTitle">WhatsApp</strong>
         <p><a id="footerWhatsapp" target="_blank" rel="noopener" href="https://wa.me/22994870650">+229 94 87 06 50</a></p>
       </div>
     </div>
@@ -328,7 +328,7 @@ footer p{color:#aaa;line-height:1.7}
     <img class="lightbox-image" id="lightboxImage" src="" alt="">
     <div class="lightbox-info">
       <div class="lightbox-title" id="lightboxTitle"></div>
-      <a class="order-btn" id="lightboxOrder" target="_blank" rel="noopener" href="#"><i class="fa-brands fa-whatsapp"></i> Commander</a>
+      <a class="order-btn" id="lightboxOrder" target="_blank" rel="noopener" href="#"><i class="fa-brands fa-whatsapp"></i> <span class="galleryOrderLabel">${escapeHtml(state.content.gallery_order_label||"Commander")}</span></a>
     </div>
   </div>
 </div>
@@ -362,19 +362,58 @@ footer p{color:#aaa;line-height:1.7}
         </div>
 
         <div class="admin-section active" id="contentTab">
-          <div class="notice">Tous les textes publics principaux sont enregistrés dans <b>site_content</b>. Modifiez-les ici sans toucher au code.</div>
-          <div class="admin-grid" id="contentFormGrid" style="margin-top:15px"></div>
-          <div class="admin-card" style="margin-top:15px">
-            <h3>Images principales</h3>
-            <div class="admin-grid">
-              <div class="field"><label>URL Hero</label><input id="heroUrlInput"></div>
-              <div class="field"><label>URL À propos</label><input id="aboutUrlInput"></div>
-            </div>
-            <div class="actions"><button class="btn btn-small" id="saveMainImages">Enregistrer les images</button></div>
-            <div id="contentStatus" class="status"></div>
-          </div>
-        </div>
+          <div class="notice"><b>Contenu réel du site</b> — chaque bloc correspond à une section visible sur le site public. Les modifications sont enregistrées dans <b>site_content</b> et répercutées sur le site.</div>
 
+          <div class="admin-card admin-content-group"><h3>En-tête et navigation</h3><div class="admin-grid">
+            <div class="field"><label>Nom de l'entreprise</label><input data-content-key="brand_name"></div><div class="field"><label>Localisation</label><input data-content-key="location"></div>
+            <div class="field"><label>Accueil</label><input data-content-key="nav_home"></div><div class="field"><label>Services</label><input data-content-key="nav_services"></div>
+            <div class="field"><label>Réalisations</label><input data-content-key="nav_gallery"></div><div class="field"><label>À propos</label><input data-content-key="nav_about"></div>
+            <div class="field"><label>Méthode</label><input data-content-key="nav_steps"></div><div class="field"><label>Contact</label><input data-content-key="nav_contact"></div>
+            <div class="field"><label>Bouton téléphone</label><input data-content-key="header_call"></div>
+          </div><button class="btn btn-small save-content-group" data-keys="brand_name,location,nav_home,nav_services,nav_gallery,nav_about,nav_steps,nav_contact,header_call">Enregistrer l'en-tête</button></div>
+
+          <div class="admin-card admin-content-group"><h3>Hero — première section</h3><div class="admin-grid">
+            <div class="field"><label>Petit titre</label><input data-content-key="hero_eyebrow"></div><div class="field"><label>Titre principal</label><input data-content-key="hero_title"></div>
+            <div class="field" style="grid-column:1/-1"><label>Texte</label><textarea data-content-key="hero_text"></textarea></div>
+            <div class="field"><label>Bouton 1</label><input data-content-key="hero_button_1"></div><div class="field"><label>Bouton 2</label><input data-content-key="hero_button_2"></div>
+            <div class="field" style="grid-column:1/-1"><label>Image du Hero — URL</label><input data-content-key="hero_image_url"></div>
+          </div><button class="btn btn-small save-content-group" data-keys="hero_eyebrow,hero_title,hero_text,hero_button_1,hero_button_2,hero_image_url">Enregistrer le Hero</button></div>
+
+          <div class="admin-card admin-content-group"><h3>Services</h3><div class="admin-grid">
+            <div class="field"><label>Petit titre</label><input data-content-key="services_eyebrow"></div><div class="field"><label>Titre</label><input data-content-key="services_title"></div>
+            <div class="field" style="grid-column:1/-1"><label>Introduction</label><textarea data-content-key="services_intro"></textarea></div>
+          </div><button class="btn btn-small save-content-group" data-keys="services_eyebrow,services_title,services_intro">Enregistrer les services</button><p class="admin-help">Les cartes de services se modifient dans l'onglet <b>Services</b>.</p></div>
+
+          <div class="admin-card admin-content-group"><h3>Réalisations / Galerie</h3><div class="admin-grid">
+            <div class="field"><label>Petit titre</label><input data-content-key="gallery_eyebrow"></div><div class="field"><label>Titre</label><input data-content-key="gallery_title"></div>
+            <div class="field" style="grid-column:1/-1"><label>Introduction</label><textarea data-content-key="gallery_intro"></textarea></div>
+            <div class="field"><label>Bouton Zoomer</label><input data-content-key="gallery_zoom_label"></div><div class="field"><label>Bouton Commander</label><input data-content-key="gallery_order_label"></div>
+          </div><button class="btn btn-small save-content-group" data-keys="gallery_eyebrow,gallery_title,gallery_intro,gallery_zoom_label,gallery_order_label">Enregistrer la galerie</button><p class="admin-help">Les 80 images et chaque réalisation se modifient dans <b>Galerie / images</b>.</p></div>
+
+          <div class="admin-card admin-content-group"><h3>À propos</h3><div class="admin-grid">
+            <div class="field"><label>Petit titre</label><input data-content-key="about_eyebrow"></div><div class="field"><label>Titre</label><input data-content-key="about_title"></div>
+            <div class="field" style="grid-column:1/-1"><label>Texte</label><textarea data-content-key="about_text"></textarea></div><div class="field" style="grid-column:1/-1"><label>Image — URL</label><input data-content-key="about_image_url"></div>
+          </div><button class="btn btn-small save-content-group" data-keys="about_eyebrow,about_title,about_text,about_image_url">Enregistrer À propos</button></div>
+
+          <div class="admin-card admin-content-group"><h3>Méthode / Étapes</h3><div class="admin-grid">
+            <div class="field"><label>Petit titre</label><input data-content-key="steps_eyebrow"></div><div class="field"><label>Titre</label><input data-content-key="steps_title"></div>
+            <div class="field" style="grid-column:1/-1"><label>Introduction</label><textarea data-content-key="steps_intro"></textarea></div>
+          </div><button class="btn btn-small save-content-group" data-keys="steps_eyebrow,steps_title,steps_intro">Enregistrer la méthode</button><p class="admin-help">Les étapes se modifient dans <b>Étapes</b>.</p></div>
+
+          <div class="admin-card admin-content-group"><h3>Contact</h3><div class="admin-grid">
+            <div class="field"><label>Petit titre</label><input data-content-key="contact_eyebrow"></div><div class="field"><label>Titre</label><input data-content-key="contact_title"></div>
+            <div class="field" style="grid-column:1/-1"><label>Texte</label><textarea data-content-key="contact_text"></textarea></div>
+            <div class="field"><label>Titre du bloc WhatsApp</label><input data-content-key="contact_side_title"></div><div class="field"><label>Texte du bloc WhatsApp</label><textarea data-content-key="contact_side_text"></textarea></div>
+            <div class="field"><label>Libellé téléphone</label><input data-content-key="contact_phone_label"></div><div class="field"><label>Libellé WhatsApp</label><input data-content-key="contact_whatsapp_label"></div>
+            <div class="field"><label>Libellé email</label><input data-content-key="contact_email_label"></div><div class="field"><label>Libellé adresse</label><input data-content-key="contact_address_label"></div><div class="field"><label>Libellé horaires</label><input data-content-key="contact_hours_label"></div>
+          </div><button class="btn btn-small save-content-group" data-keys="contact_eyebrow,contact_title,contact_text,contact_side_title,contact_side_text,contact_phone_label,contact_whatsapp_label,contact_email_label,contact_address_label,contact_hours_label">Enregistrer le contenu Contact</button><p class="admin-help">Les coordonnées se modifient dans l'onglet <b>Contact</b>.</p></div>
+
+          <div class="admin-card admin-content-group"><h3>Pied de page</h3><div class="admin-grid">
+            <div class="field"><label>Texte</label><textarea data-content-key="footer_text"></textarea></div><div class="field"><label>Titre Contact</label><input data-content-key="footer_contact_title"></div>
+            <div class="field"><label>Titre WhatsApp</label><input data-content-key="footer_whatsapp_title"></div><div class="field"><label>Copyright</label><input data-content-key="footer_copyright"></div>
+          </div><button class="btn btn-small save-content-group" data-keys="footer_text,footer_contact_title,footer_whatsapp_title,footer_copyright">Enregistrer le pied de page</button></div>
+          <div id="contentStatus" class="status"></div>
+        </div>
         <div class="admin-section" id="galleryTab">
           <div class="file-import">
             <h3 style="margin-top:0">Importer les 80 images de la racine</h3>
@@ -460,6 +499,9 @@ const defaults = {
     about_image_url:"about.jpg",
     steps_eyebrow:"Notre méthode", steps_title:"Comment ça marche", steps_intro:"Un accompagnement simple, clair et personnalisé.",
     contact_eyebrow:"Parlons de votre projet", contact_title:"Contactez-nous", contact_text:"Échangez directement avec notre équipe pour présenter votre projet.",
+    contact_side_title:"Un projet en tête ?", contact_side_text:"Utilisez WhatsApp pour nous envoyer rapidement votre besoin, vos photos et les détails de votre projet.", contact_whatsapp_label:"WhatsApp",
+    contact_phone_label:"Téléphone", contact_email_label:"Email", contact_address_label:"Adresse", contact_hours_label:"Horaires",
+    gallery_zoom_label:"Zoomer", gallery_order_label:"Commander", footer_whatsapp_title:"WhatsApp",
     footer_text:"Atelier d'aménagement d'espaces.", footer_contact_title:"Contact", footer_copyright:"© 2026 Esthétique Plus. Tous droits réservés."
   },
   contact_settings:{
@@ -476,8 +518,9 @@ const textMap = {
   heroBtn1:"hero_button_1", heroBtn2:"hero_button_2", servicesEyebrow:"services_eyebrow", servicesTitle:"services_title", servicesIntro:"services_intro",
   galleryEyebrow:"gallery_eyebrow", galleryTitle:"gallery_title", galleryIntro:"gallery_intro", aboutEyebrow:"about_eyebrow", aboutTitle:"about_title",
   aboutText:"about_text", stepsEyebrow:"steps_eyebrow", stepsTitle:"steps_title", stepsIntro:"steps_intro", contactEyebrow:"contact_eyebrow",
-  contactTitle:"contact_title", contactText:"contact_text", footerBrand:"brand_name", footerLocation:"location", footerText:"footer_text",
-  footerContactTitle:"footer_contact_title", footerCopyright:"footer_copyright"
+  contactTitle:"contact_title", contactText:"contact_text", contactSideTitle:"contact_side_title", contactSideText:"contact_side_text",
+  contactWhatsappLabel:"contact_whatsapp_label", contactPhoneLabel:"contact_phone_label", contactEmailLabel:"contact_email_label", contactAddressLabel:"contact_address_label", contactHoursLabel:"contact_hours_label",
+  footerBrand:"brand_name", footerLocation:"location", footerText:"footer_text", footerContactTitle:"footer_contact_title", footerCopyright:"footer_copyright", footerWhatsappTitle:"footer_whatsapp_title"
 };
 const textKeys = Object.keys(defaults.site_content);
 
@@ -532,6 +575,8 @@ function applyText(){
   document.getElementById("contactEmail").href=email ? `mailto:${email}` : "#";
   document.getElementById("contactAddress").textContent=address || "—";
   document.getElementById("contactHours").textContent=hours || "—";
+  const dynamicText={contactSideTitle:"contact_side_title",contactSideText:"contact_side_text",contactWhatsappLabel:"contact_whatsapp_label",contactPhoneLabel:"contact_phone_label",contactEmailLabel:"contact_email_label",contactAddressLabel:"contact_address_label",contactHoursLabel:"contact_hours_label",footerWhatsappTitle:"footer_whatsapp_title"};
+  for(const [id,key] of Object.entries(dynamicText)){const el=document.getElementById(id);if(el)el.textContent=state.content[key] ?? "";}
   document.getElementById("footerPhone").textContent=phone || "—";
   document.getElementById("footerAddress").textContent=address || "—";
   document.getElementById("footerWhatsapp").textContent=wa ? `+${String(wa).replace(/^\+?/,"")}` : "—";
@@ -564,8 +609,8 @@ function renderGallery(){
         <h3>${title}</h3>
         <p>${description}</p>
         <div class="gallery-actions">
-          <button type="button" class="btn btn-small" data-gallery-open="1" data-gallery-image="${image}" data-gallery-title="${title}"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoomer</button>
-          <a class="order-btn" target="_blank" rel="noopener" href="${orderUrl}"><i class="fa-brands fa-whatsapp"></i> Commander</a>
+          <button type="button" class="btn btn-small" data-gallery-open="1" data-gallery-image="${image}" data-gallery-title="${title}"><i class="fa-solid fa-magnifying-glass-plus"></i> <span class="galleryZoomLabel">${escapeHtml(state.content.gallery_zoom_label||"Zoomer")}</span></button>
+          <a class="order-btn" target="_blank" rel="noopener" href="${orderUrl}"><i class="fa-brands fa-whatsapp"></i> <span class="galleryOrderLabel">${escapeHtml(state.content.gallery_order_label||"Commander")}</span></a>
         </div>
       </div>
     </article>`;
@@ -582,10 +627,18 @@ function renderSteps(){
 }
 function renderAll(){ applyText(); renderServices(); renderGallery(); renderSteps(); }
 
+async function ensureContentDefaults(){
+  if(!sb)return;
+  const rows=Object.entries(defaults.site_content).map(([key,value])=>({key,value,published:true}));
+  const {error}=await sb.from("site_content").upsert(rows,{onConflict:"key",ignoreDuplicates:true});
+  if(error)console.warn("Initialisation du contenu:",error.message);
+}
+
 async function loadPublic(){
   localData();
   if(!sb){ renderAll(); return; }
   try{
+    await ensureContentDefaults();
     const [c,m,s,e,contact]=await Promise.all([
       sb.from("site_content").select("key,value").eq("published",true),
       sb.from("models").select("*").eq("published",true).order("sort_order",{ascending:true}),
@@ -614,6 +667,7 @@ function openGalleryZoom(image,title){
   lightboxImage.alt=title||"Réalisation";
   lightboxTitle.textContent=title||"Réalisation";
   lightboxOrder.href=whatsappOrderUrl(title||"Réalisation",image||"");
+  const lot=lightboxOrder.querySelector(".lightboxOrderLabel"); if(lot) lot.textContent=state.content.gallery_order_label||"Commander";
   lightbox.classList.add("open");
   document.body.style.overflow="hidden";
 }
@@ -749,26 +803,23 @@ document.getElementById("loginBtn").addEventListener("click",async()=>{
 });
 document.getElementById("logoutBtn").addEventListener("click",async()=>{await sb.auth.signOut();state.session=null;showLogin();});
 
-const contentLabels={
-  brand_name:"Nom de l'entreprise",location:"Localisation",nav_home:"Navigation Accueil",nav_services:"Navigation Services",nav_gallery:"Navigation Réalisations",
-  nav_about:"Navigation À propos",nav_steps:"Navigation Méthode",nav_contact:"Navigation Contact",header_call:"Bouton Appeler",
-  hero_eyebrow:"Hero — petit titre",hero_title:"Hero — titre",hero_text:"Hero — texte",hero_button_1:"Hero — bouton 1",hero_button_2:"Hero — bouton 2",
-  services_eyebrow:"Services — petit titre",services_title:"Services — titre",services_intro:"Services — introduction",
-  gallery_eyebrow:"Galerie — petit titre",gallery_title:"Galerie — titre",gallery_intro:"Galerie — introduction",
-  about_eyebrow:"À propos — petit titre",about_title:"À propos — titre",about_text:"À propos — texte",
-  steps_eyebrow:"Étapes — petit titre",steps_title:"Étapes — titre",steps_intro:"Étapes — introduction",
-  contact_eyebrow:"Contact — petit titre",contact_title:"Contact — titre",contact_text:"Contact — texte",
-  footer_text:"Pied de page — texte",footer_contact_title:"Pied de page — contact",footer_copyright:"Pied de page — copyright"
-};
-
+const contentLabels={};
 function buildContentForm(){
-  const grid=document.getElementById("contentFormGrid");
-  grid.innerHTML=textKeys.map(k=>`<div class="field"><label>${escapeHtml(contentLabels[k]||k)}</label><textarea data-content-key="${escapeHtml(k)}">${escapeHtml(state.content[k]||"")}</textarea></div>`).join("");
+  document.querySelectorAll("[data-content-key]").forEach(el=>{ el.value=state.content[el.dataset.contentKey] ?? ""; });
 }
 async function saveContentKey(k,v){
   const {error}=await sb.from("site_content").upsert({key:k,value:v,published:true,updated_at:new Date().toISOString()});
-  if(error)throw error; state.content[k]=v;
+  if(error)throw error;
+  state.content[k]=v;
 }
+document.querySelectorAll(".save-content-group").forEach(btn=>btn.addEventListener("click",async()=>{
+  const keys=(btn.dataset.keys||"").split(",").filter(Boolean); btn.disabled=true;
+  try{
+    for(const k of keys){ const el=document.querySelector(`[data-content-key="${k}"]`); if(el) await saveContentKey(k,el.value); }
+    renderAll(); setStatus("contentStatus","Section enregistrée et mise à jour sur le site.",true);
+  }catch(e){setStatus("contentStatus",e.message,false)} finally{btn.disabled=false;}
+}));
+
 document.getElementById("saveMainImages").addEventListener("click",async()=>{
   try{
     await saveContentKey("hero_image_url",document.getElementById("heroUrlInput").value.trim());
@@ -794,14 +845,6 @@ async function loadAdminData(){
   document.getElementById("accountEmail").value=state.session?.user?.email||"";
   buildContentForm();buildContactForm();renderAdminLists();renderAll();
 }
-
-document.getElementById("contentFormGrid").addEventListener("input",e=>{
-  const k=e.target.dataset.contentKey;if(k)state.content[k]=e.target.value;
-});
-document.getElementById("contentFormGrid").addEventListener("change",async e=>{
-  const k=e.target.dataset.contentKey;if(!k)return;
-  try{await saveContentKey(k,e.target.value);renderAll();setStatus("contentStatus","Texte enregistré.",true)}catch(err){setStatus("contentStatus",err.message,false)}
-});
 
 const contactLabels={phone:"Téléphone",whatsapp:"WhatsApp (numéro international)",email:"Email",address:"Adresse",contact_hours:"Horaires"};
 function buildContactForm(){
@@ -892,31 +935,129 @@ document.querySelectorAll(".tab-btn").forEach(btn=>btn.addEventListener("click",
 }));
 
 async function importRootImages(){
-  if(!sb || !state.session || !(await verifyAdmin()))return;
-  const btn=document.getElementById("importRootBtn"); btn.disabled=true;
-  let done=0,errors=0;
-  for(let i=1;i<=80;i++){
-    const fileName=`${i}.jpg`, source=rootImage(i);
-    try{
-      const response=await fetch(source,{cache:"no-store"});
-      if(!response.ok)throw new Error("Image introuvable");
-      const blob=await response.blob();
-      const path=`gallery/${i}.jpg`;
-      const upload=await sb.storage.from("site-images").upload(path,blob,{contentType:blob.type||"image/jpeg",upsert:true});
-      if(upload.error)throw upload.error;
-      const {data:pub}=sb.storage.from("site-images").getPublicUrl(path);
-      const existing=await sb.from("models").select("id").eq("sort_order",i).maybeSingle();
-      const payload={title:`Réalisation ${i}`,description:"",image_url:pub.publicUrl,sort_order:i,published:true,updated_at:new Date().toISOString()};
-      let result;
-      if(existing.data) result=await sb.from("models").update(payload).eq("id",existing.data.id);
-      else result=await sb.from("models").insert(payload);
-      if(result.error)throw result.error;
-      done++;
-    }catch(e){console.warn(fileName,e);errors++}
-    const pct=Math.round((i/80)*100);document.getElementById("importProgress").style.width=pct+"%";setStatus("importStatus",`${i}/80 traitées — ${done} importées, ${errors} erreur(s).`,errors===0);
+  const btn=document.getElementById("importRootBtn");
+  if(!sb){
+    setStatus("importStatus","Supabase n'est pas configuré.",false);
+    return;
   }
-  btn.disabled=false; await loadAdminData();
+
+  if(!state.session){
+    await checkSession();
+  }
+  if(!state.session){
+    setStatus("importStatus","Session administrateur absente. Reconnectez-vous.",false);
+    return;
+  }
+
+  /* Vérification directe du compte actuellement connecté. */
+  const {data:{user},error:userError}=await sb.auth.getUser();
+  if(userError || !user){
+    setStatus("importStatus","Session Supabase expirée. Reconnectez-vous.",false);
+    return;
+  }
+
+  const {data:adminRow,error:adminError}=await sb
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(adminError || !adminRow){
+    console.error("Autorisation import images:",adminError);
+    setStatus("importStatus","Ce compte n'est pas autorisé à importer des images. Vérifiez admin_users.",false);
+    return;
+  }
+
+  btn.disabled=true;
+  let done=0,errors=0;
+  const errorDetails=[];
+
+  for(let i=1;i<=80;i++){
+    const fileName=`${i}.jpg`;
+    /* URL absolue de l'image réellement présente à la racine du site. */
+    const source=new URL(fileName,document.baseURI).href;
+
+    try{
+      const response=await fetch(source,{cache:"no-store",credentials:"same-origin"});
+      if(!response.ok){
+        throw new Error(`HTTP ${response.status} — ${source}`);
+      }
+
+      const blob=await response.blob();
+      if(!blob.size){
+        throw new Error("Image vide");
+      }
+
+      const path=`gallery/${i}.jpg`;
+      const storage=sb.storage.from("site-images");
+
+      /* Upload avec remplacement : nécessite INSERT/SELECT/UPDATE,
+         tous prévus dans le SQL Supabase. */
+      const upload=await storage.upload(path,blob,{
+        contentType:blob.type || "image/jpeg",
+        upsert:true,
+        cacheControl:"3600"
+      });
+
+      if(upload.error){
+        throw new Error(`Storage : ${upload.error.message}`);
+      }
+
+      const {data:pub}=storage.getPublicUrl(path);
+      if(!pub?.publicUrl){
+        throw new Error("URL publique Supabase introuvable");
+      }
+
+      const {data:existing,error:findError}=await sb
+        .from("models")
+        .select("id")
+        .eq("sort_order",i)
+        .maybeSingle();
+
+      if(findError) throw new Error(`Galerie : ${findError.message}`);
+
+      const payload={
+        title:`Réalisation ${i}`,
+        description:"",
+        image_url:pub.publicUrl,
+        sort_order:i,
+        published:true,
+        updated_at:new Date().toISOString()
+      };
+
+      let result;
+      if(existing?.id){
+        result=await sb.from("models").update(payload).eq("id",existing.id);
+      }else{
+        result=await sb.from("models").insert(payload);
+      }
+
+      if(result.error){
+        throw new Error(`Galerie : ${result.error.message}`);
+      }
+
+      done++;
+    }catch(e){
+      errors++;
+      const detail=`${fileName}: ${e?.message || e}`;
+      errorDetails.push(detail);
+      console.warn("Import image échoué",detail);
+    }
+
+    const pct=Math.round((i/80)*100);
+    document.getElementById("importProgress").style.width=pct+"%";
+
+    let message=`${i}/80 traitées — ${done} importées, ${errors} erreur(s).`;
+    if(errorDetails.length){
+      message+=` Dernière erreur : ${errorDetails[errorDetails.length-1]}`;
+    }
+    setStatus("importStatus",message,errors===0);
+  }
+
+  btn.disabled=false;
+  await loadAdminData();
 }
+
 document.getElementById("importRootBtn").addEventListener("click",importRootImages);
 
 document.getElementById("saveEmailBtn").addEventListener("click",async()=>{
